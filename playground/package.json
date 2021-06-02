@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "axios": "^0.21.1",
+    "ml-regression-multivariate-linear": "^2.0.3"
+  }
+}
