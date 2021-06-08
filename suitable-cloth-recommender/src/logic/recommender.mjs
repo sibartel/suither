@@ -1,6 +1,9 @@
 import weather from './weather-api.mjs'
 import UserModel from "./user-model.mjs"
-import {cloth_sets} from "./cloth_sets.mjs"
+
+// TODO: Support cloth variants, use hourly best suiting cloth configuration
+// TODO: Split model_data in default and user data points
+// TODO: Generate default model_data based on self assessment of users
 
 class Recommender {
   constructor(cloth_sets, model_data) {
@@ -26,34 +29,5 @@ class Recommender {
     this.user_model.feedback(current_temperature, cloth_insulation, activity, thermal_sensation)
   }
 }
-
-// feels_like_temperature, cloth_insulation, activity, thermal_sensation
-const test_model_data = [
-  [0, 0.57, 60, -3],
-  [5, 0.57, 60, -3],
-  [10, 0.57, 60, -3],
-  [15, 0.57, 60, -2],
-  [20, 0.57, 60, 0],
-  [25, 0.57, 60, 0],
-  [30, 0.57, 60, 1],
-  [35, 0.57, 60, 3],
-  [20, 0.36, 60, -2],
-  [20, 0.57, 60, -1],
-  [20, 0.61, 60, 0],
-  [20, 0.96, 60, 1],
-  [20, 1.30, 60, 3],
-  [20, 0.74, 60, 1],
-  [20, 0.57, 60, -1],
-  [20, 0.57, 120, 0],
-  [20, 0.57, 48, -3],
-  [20, 0.57, 180, 1],
-]
-
-// TODO: Support cloth variants, use hourly best suiting cloth configuration
-// TODO: Split model_data in default and user data points
-// TODO: Generate default model_data based on self assessment of users
-
-// let r = new Recommender(cloth_sets, test_model_data)
-// r.recommend(1, 60).then((r) => console.log(r))
 
 export default Recommender
