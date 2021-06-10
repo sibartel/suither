@@ -1,4 +1,5 @@
-import MLR from "ml-regression-multivariate-linear"
+import Regressor from "./regressor.mjs"
+import {Matrix} from "ml-matrix"
 
 // https://en.wikipedia.org/wiki/Thermal_comfort#Interplay_of_temperature_and_humidity
 // https://en.wikipedia.org/wiki/Clothing_insulation
@@ -6,6 +7,10 @@ import MLR from "ml-regression-multivariate-linear"
 class UserModel {
   constructor(data) {
     this._data = data
+    this._model = new Regressor(
+      Matrix.columnVector([7.7, -1.8e-1, -4.6, -1.2e-2]),
+      1e6
+    )
     this.update()
   }
 
@@ -16,7 +21,7 @@ class UserModel {
   update() {
     let x = this._data.map((set) => set.slice(0, -1))
     let y = this._data.map((set) => set.slice(-1))
-    this._model = new MLR(x, y)
+    this._model.train(x, y)
   }
 
   feedback(feels_like_temperature, cloth_insulation, activity, thermal_sensation) {
@@ -25,7 +30,7 @@ class UserModel {
   }
 
   predict(feels_like_temperature, cloth_insulation, activity) {
-    return this._model.predict([[feels_like_temperature, cloth_insulation, activity]])[0][0]
+    return this._model.predict([[feels_like_temperature, cloth_insulation, activity]]).get(0, 0)
   }
 }
 
