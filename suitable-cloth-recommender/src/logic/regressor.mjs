@@ -2,8 +2,9 @@ import {Matrix} from 'ml-matrix'
 
 export default class Regressor {
   constructor(options) {
-    const {number_epochs = 1e6, learning_rate = 1e-5, weights = undefined} = options
+    const {number_epochs = 1e6, batch_size = 1, learning_rate = 1e-5, weights = undefined} = options
     this.number_epochs = number_epochs
+    this.batch_size = batch_size
     this.learning_rate = learning_rate
     this.weights = weights ? Matrix.checkMatrix(weights) : undefined;
   }
@@ -11,6 +12,7 @@ export default class Regressor {
   toJSON(_) {
     return {
       number_epochs: this.number_epochs,
+      batch_size: this.batch_size,
       learning_rate: this.learning_rate,
       weights: this.weights
     }
@@ -24,16 +26,19 @@ export default class Regressor {
 
     for (let epoch = 0; epoch < this.number_epochs; epoch++) {
       let cum_error = 0
-      for (let row in shuffled_indices(features.rows)) {
-        const step_features = features.getRowVector(row)
-        const step_target = target.get(row, 0)
+      for (let rows of batched_indices(features.rows, this.batch_size)) {
+        // console.log(rows)
+        const step_features = features.subMatrixRow(rows)
+        const step_target = target.subMatrixRow(rows)
 
-        const prediction = this.predict(step_features, weights).get(0, 0)
-        const error = step_target - prediction
+        const prediction = this.predict(step_features, weights)
+        const error = step_target.sub(prediction)
 
-        const gradient = this.derivative_function(step_features, weights).mul(error)
-        weights = weights.add(gradient.mul(this.learning_rate).transpose())
-        cum_error += Math.abs(error)
+        const gradient = Matrix.columnVector(
+          this.gradient_function(step_features, weights, error).transpose().sum('row')
+        )
+        weights = weights.add(gradient.mul(this.learning_rate))
+        cum_error += error.abs().transpose().mmul(Matrix.ones(error.rows, 1)).get(0, 0)
       }
       console.log(`Epoch ${epoch}/${this.number_epochs}: ${cum_error / features.rows}`)
     }
@@ -51,11 +56,11 @@ export default class Regressor {
     return Matrix.add(mod_features.mmul(weights).exp(), (1)).pow(-1).mul(6).sub(3)
   }
 
-  derivative_function(features, weights) {
+  gradient_function(features, weights, error) {
     let mod_features = features.clone().addColumn(0, Matrix.ones(features.rows, 1))
     return Matrix.add(
       mod_features.mmul(weights).exp(), (1)
-    ).pow(-2).mul(6).mul(mod_features.mmul(weights).exp()).mmul(mod_features).neg()
+    ).pow(-2).mul(6).mul(mod_features.mmul(weights).exp()).mul(error).mmul(mod_features).neg()
   }
 }
 
@@ -73,7 +78,13 @@ function shuffle(array) {
   return array
 }
 
-function shuffled_indices(end) {
-  let indices = [...Array(end).keys()]
+function shuffled_indices(array_size) {
+  let indices = [...Array(array_size).keys()]
   return shuffle(indices)
+}
+
+function* batched_indices(array_size, batch_size) {
+  let indices = shuffled_indices(array_size)
+  while(indices.length > 0)
+    yield indices.splice(0, batch_size)
 }
