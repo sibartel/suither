@@ -24,7 +24,7 @@ export default class Regressor {
 
     for (let epoch = 0; epoch < this.number_epochs; epoch++) {
       let cum_error = 0
-      for (let row = 0; row < features.rows; row++) {
+      for (let row in shuffled_indices(features.rows)) {
         const step_features = features.getRowVector(row)
         const step_target = target.get(row, 0)
 
@@ -57,4 +57,23 @@ export default class Regressor {
       mod_features.mmul(weights).exp(), (1)
     ).pow(-2).mul(6).mul(mod_features.mmul(weights).exp()).mmul(mod_features).neg()
   }
+}
+
+function shuffle(array) {
+  let current = array.length
+  let random
+
+  while (0 !== current) {
+    random = Math.floor(Math.random() * current)
+    current--
+
+    [array[current], array[random]] = [array[random], array[current]]
+  }
+
+  return array
+}
+
+function shuffled_indices(end) {
+  let indices = [...Array(end).keys()]
+  return shuffle(indices)
 }
