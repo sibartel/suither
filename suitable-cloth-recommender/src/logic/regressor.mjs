@@ -1,10 +1,19 @@
 import {Matrix} from 'ml-matrix'
 
 export default class Regressor {
-  constructor(weights = undefined, number_epochs = 1000000, learning_rate = 0.00001) {
+  constructor(options) {
+    const {number_epochs = 1e6, learning_rate = 1e-5, weights = undefined} = options
     this.number_epochs = number_epochs
     this.learning_rate = learning_rate
     this.weights = weights ? Matrix.checkMatrix(weights) : undefined;
+  }
+
+  toJSON(_) {
+    return {
+      number_epochs: this.number_epochs,
+      learning_rate: this.learning_rate,
+      weights: this.weights
+    }
   }
 
   train(features, target) {

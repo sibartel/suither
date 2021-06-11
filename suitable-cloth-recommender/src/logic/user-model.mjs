@@ -4,18 +4,23 @@ import {Matrix} from "ml-matrix"
 // https://en.wikipedia.org/wiki/Thermal_comfort#Interplay_of_temperature_and_humidity
 // https://en.wikipedia.org/wiki/Clothing_insulation
 
+const DEFAULT_WEIGHTS = Matrix.columnVector([7.7, -1.8e-1, -4.6, -1.2e-2])
+
 class UserModel {
-  constructor(data) {
+  constructor(options) {
+    const {data = [], model = new Regressor({
+      weights: DEFAULT_WEIGHTS
+    })} = options
     this._data = data
-    this._model = new Regressor(
-      Matrix.columnVector([7.7, -1.8e-1, -4.6, -1.2e-2]),
-      1e6
-    )
+    this._model = model
     this.update()
   }
 
   toJSON(_) {
-    return this._data
+    return {
+      data: this._data,
+      model: this._model
+    }
   }
 
   update() {

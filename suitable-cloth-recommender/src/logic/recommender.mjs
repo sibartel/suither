@@ -2,13 +2,12 @@ import weather from './weather-api.mjs'
 import UserModel from "./user-model.mjs"
 
 // TODO: Support cloth variants, use hourly best suiting cloth configuration
-// TODO: Split model_data in default and user data points
 // TODO: Generate default model_data based on self assessment of users
 
 class Recommender {
   constructor(cloth_sets, model_data) {
     this.cloth_sets = cloth_sets
-    this.user_model = new UserModel(model_data)
+    this.user_model = new UserModel({data: model_data})
   }
 
   async recommend(relevant_hours = 8, activity = 60) {
