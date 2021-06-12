@@ -4,7 +4,7 @@ import {Matrix} from "ml-matrix"
 // https://en.wikipedia.org/wiki/Thermal_comfort#Interplay_of_temperature_and_humidity
 // https://en.wikipedia.org/wiki/Clothing_insulation
 
-const DEFAULT_WEIGHTS = Matrix.columnVector([7.7, -1.8e-1, -4.6, -1.2e-2])
+const DEFAULT_WEIGHTS = Matrix.columnVector([7.93, -1.95e-1, -4.6, -1.16e-2])
 
 class UserModel {
   constructor(options) {

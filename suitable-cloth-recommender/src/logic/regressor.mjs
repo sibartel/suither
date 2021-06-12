@@ -2,7 +2,7 @@ import {Matrix} from 'ml-matrix'
 
 export default class Regressor {
   constructor(options) {
-    const {number_epochs = 1e6, batch_size = 1, learning_rate = 1e-5, weights = undefined} = options
+    const {number_epochs = 1e6, batch_size = undefined, learning_rate = 1e-5, weights = undefined} = options
     this.number_epochs = number_epochs
     this.batch_size = batch_size
     this.learning_rate = learning_rate
@@ -26,16 +26,16 @@ export default class Regressor {
 
     for (let epoch = 0; epoch < this.number_epochs; epoch++) {
       let cum_error = 0
-      for (let rows of batched_indices(features.rows, this.batch_size)) {
-        // console.log(rows)
+      for (let rows of batched_indices(features.rows, this.batch_size ?? features.rows)) {
         const step_features = features.subMatrixRow(rows)
         const step_target = target.subMatrixRow(rows)
 
         const prediction = this.predict(step_features, weights)
-        const error = step_target.sub(prediction)
+        const error = prediction.sub(step_target)
 
+        let mod_features = step_features.clone().addColumn(0, Matrix.ones(step_features.rows, 1))
         const gradient = Matrix.columnVector(
-          this.gradient_function(step_features, weights, error).transpose().sum('row')
+          mod_features.mulColumnVector(error).transpose().mean('row')
         )
         weights = weights.add(gradient.mul(this.learning_rate))
         cum_error += error.abs().transpose().mmul(Matrix.ones(error.rows, 1)).get(0, 0)
@@ -48,19 +48,12 @@ export default class Regressor {
   }
 
   predict(features, weights) {
-    return this.target_function(Matrix.checkMatrix(features), weights ?? this.weights)
-  }
-
-  target_function(features, weights) {
-    let mod_features = features.clone().addColumn(0, Matrix.ones(features.rows, 1))
-    return Matrix.add(mod_features.mmul(weights).exp(), (1)).pow(-1).mul(6).sub(3)
-  }
-
-  gradient_function(features, weights, error) {
+    features = Matrix.checkMatrix(features)
     let mod_features = features.clone().addColumn(0, Matrix.ones(features.rows, 1))
     return Matrix.add(
-      mod_features.mmul(weights).exp(), (1)
-    ).pow(-2).mul(6).mul(mod_features.mmul(weights).exp()).mul(error).mmul(mod_features).neg()
+      mod_features.mmul(weights ?? this.weights).exp(),
+      1
+    ).pow(-1).mul(6).sub(3)
   }
 }
 
