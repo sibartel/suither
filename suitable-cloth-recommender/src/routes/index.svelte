@@ -1,17 +1,5 @@
 <script>
-import { onMount } from "svelte";
 
-onMount(async () => {
-  fetch("https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}")
-  .then(response => response.json())
-  .then(data => {
-		console.log(data);
-    apiData.set(data);
-  }).catch(error => {
-    console.log(error);
-    return [];
-  });
-});
 </script>
 
 <style>

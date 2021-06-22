@@ -1,15 +1,35 @@
+<style>
+	input {
+		background-color: rgb(255, 255, 255);
+	}
+	p {
+		max-width: 400px;
+	}
+	button{
+		background-color:rgb(255, 255, 255);
+		border-color: rgb(0, 0, 0);
+	}
+</style>
+
 <script>
-  	import { goto } from '@sapper/app';
+  	import {goto} from '@sapper/app';
+	import {Slider} from 'svelte-materialify'
 
 	let name = '';
-	let topic = 1;
 	let age = '';
 	let weight = '';
 	let heigth = '';
+	let heat = 0.0;
+	let min = -300;
+	let max = 300;
 
 	const handleClick = () => {
+		console.log(heat);
 		goto('/start2')
 	}
+
+	//const emojis = ['❄️ ❄️ ❄️ ', '❄️ ❄️ ', '❄️ ', '☁️', '🔥', '🔥🔥', '🔥🔥🔥'];
+  	//const customThumb = (v) => emojis[Math.min(Math.floor((v+300) / 7), 300)];
 </script>
 
 <svelte:head>
@@ -50,6 +70,19 @@
 	<input bind:value={heigth}>
 	cm
 </p>
+<p> Heat self assesment
+	
+	<Slider {min} {max} bind:value={heat}>
+		<span slot="prepend-outer">
+			❄️
+		</span>
+		<span slot="append-outer">
+			🔥
+		  </span>
+	</Slider>
+	
+</p>
+{heat}
 <p>
 	<button on:click={handleClick}>Confirm</button>
 </p>
