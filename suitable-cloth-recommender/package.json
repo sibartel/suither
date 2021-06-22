@@ -14,7 +14,8 @@
     "ml-matrix": "^6.8.0",
     "ml-regression-multivariate-linear": "^2.0.3",
     "polka": "next",
-    "sirv": "^1.0.0"
+    "sirv": "^1.0.0",
+    "svelte-materialify": "^0.3.10"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

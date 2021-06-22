@@ -7,13 +7,15 @@
 
 <script>
 	import { goto } from '@sapper/app';
-	import weather from "../logic/weather-api.mjs";
-
 	import {cloth_sets} from "../logic/cloth_sets.mjs"
 	import {default_model_data} from "../logic/default_model_data.mjs"
 	import Recommender from "../logic/recommender.mjs"
+	import weather from "../logic/weather-api.mjs"
 
-	let option = 1;
+	let b1 = false;
+	let b2 = false;
+	let b3 = false;
+	let b4 = false;
 	
 	const handleClick = () => {
 		goto('/pick')
@@ -22,8 +24,9 @@
 		goto('/review')
 	}
 
-	let r = new Recommender(cloth_sets, default_model_data)
-	r.recommend(4, 60).then((r) => console.log(r))
+	/* let recs = [{description : ''}];
+	let r = new Recommender(cloth_sets, default_model_data);
+	r.recommend(4, 60).then((r) => recs = r); */
 
 	let temp = 0;
 	weather.get_weather_current().then(forecast => temp = forecast.feels_like);
@@ -44,33 +47,31 @@
 </p>
 </div>
 
-{#each recs as rec}
+<!-- {#each recs as rec}
 	<div>
-		{rec.description} : {rec.predicted_thermal_sensation}
+		{rec.description}
 	</div>	
 {:else}
 	<p></p>	
-{/each}
+{/each} -->
 
 <div>
-    <p>
+<p>	
+	<img src="a.png" alt="">
+	<input type=checkbox bind:checked={b1}>
 	<img src="2000px-Stick_Figure.svg.png" alt="">
-	<input type=radio bind:group={option} value={1}>
-	<img src="2000px-Stick_Figure.svg.png" alt="">
-	<input type=radio bind:group={option} value={2}>
-    </p>
+	<input type=checkbox bind:checked={b2}>
 
-    <p>
+</p>
+<p>
 	<img src="2000px-Stick_Figure.svg.png" alt="">
-	<input type=radio bind:group={option} value={3}>
+	<input type=checkbox bind:checked={b3}>
 	<img src="2000px-Stick_Figure.svg.png" alt="">
-	<input type=radio bind:group={option} value={4}>
-    </p>
+	<input type=checkbox bind:checked={b4}>
+</p>
 
-    <p>
+</div>
+<div>
 	<button on:click={handleClick}>Back</button>
 	<button on:click={handleClick2}>Finish</button>
-    </p>
-
-    Selected Option: {option}
 </div>

@@ -7,11 +7,12 @@
 	main {
 		position: relative;
 		max-width: 56em;
-		background-color: rgb(255, 255, 255);
+		background-color: rgb(247, 245, 245);
 		padding: 2em;
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
+	
 </style>
 
 <Nav {segment}/>
