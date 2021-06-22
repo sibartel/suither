@@ -5,6 +5,7 @@ import {Matrix} from "ml-matrix"
 // https://en.wikipedia.org/wiki/Clothing_insulation
 
 const DEFAULT_WEIGHTS = Matrix.columnVector([7.93, -1.95e-1, -4.6, -1.16e-2])
+const MIN_DATA_POINTS = 18
 
 class UserModel {
   constructor(options) {
@@ -13,6 +14,8 @@ class UserModel {
     })} = options
     this._data = data
     this._model = model
+    if (this._data.length > MIN_DATA_POINTS)
+      this.update()
   }
 
   toJSON(_) {
@@ -23,6 +26,7 @@ class UserModel {
   }
 
   reset(sensation_deviation) {
+    this._data = []
     this._model.weights = DEFAULT_WEIGHTS.add(Matrix.columnVector([sensation_deviation, 0, 0, 0]))
   }
 
@@ -34,7 +38,8 @@ class UserModel {
 
   feedback(feels_like_temperature, cloth_insulation, activity, thermal_sensation) {
     this._data.append([feels_like_temperature, cloth_insulation, activity, thermal_sensation])
-    this.update()
+    if (this._data.length > MIN_DATA_POINTS)
+      this.update()
   }
 
   predict(feels_like_temperature, cloth_insulation, activity) {
