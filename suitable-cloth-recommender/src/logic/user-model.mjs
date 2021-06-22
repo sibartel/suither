@@ -23,6 +23,10 @@ class UserModel {
     }
   }
 
+  reset(sensation_deviation) {
+    this._model.weights = DEFAULT_WEIGHTS.add(Matrix.columnVector([sensation_deviation, 0, 0, 0]))
+  }
+
   update() {
     let x = this._data.map((set) => set.slice(0, -1))
     let y = this._data.map((set) => set.slice(-1))
