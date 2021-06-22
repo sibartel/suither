@@ -1,8 +1,6 @@
 import weather from './weather-api.mjs'
 import UserModel from "./user-model.mjs"
 
-// TODO: Support cloth variants, use hourly best suiting cloth configuration
-
 class Recommender {
   constructor(cloth_sets) {
     this.cloth_sets = cloth_sets
@@ -28,18 +26,25 @@ class Recommender {
     let forecast = (await weather.get_weather_forecast()).slice(0, relevant_hours)
 
     return this.cloth_sets.map(cs => {
-      let forecast_sensation = forecast.map(hour =>
-        this.user_model.predict(hour.feels_like, cs.insulation, activity)
-      )
+      let {variants, ...base_variant} = cs
+      let cloth_variants = [base_variant, ...variants ?? []]
 
-      console.log(forecast_sensation)
+      let forecast_sensation = forecast.map(hour => {
+        return cloth_variants.map(cv => ({
+          predicted_thermal_sensation: this.user_model.predict(hour.feels_like, cv.insulation, activity),
+          ...cv
+        })).reduce((p, c) =>
+          Math.abs(p.predicted_thermal_sensation) < Math.abs(c.predicted_thermal_sensation) ? p : c
+        )
+      })
 
       return {
         predicted_thermal_sensation: {
           hourly: forecast_sensation,
-          max: Math.max(...forecast_sensation),
-          min: Math.min(...forecast_sensation),
-          mean: forecast_sensation.reduce((acc, ts) => acc + ts, 0) / relevant_hours
+          max: Math.max(...forecast_sensation.map(data => data.predicted_thermal_sensation)),
+          min: Math.min(...forecast_sensation.map(data => data.predicted_thermal_sensation)),
+          mean: forecast_sensation.map(data => data.predicted_thermal_sensation)
+            .reduce((acc, ts) => acc + ts, 0) / relevant_hours
         },
         ...cs
       }
