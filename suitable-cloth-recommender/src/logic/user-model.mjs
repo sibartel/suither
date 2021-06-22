@@ -13,7 +13,6 @@ class UserModel {
     })} = options
     this._data = data
     this._model = model
-    this.update()
   }
 
   toJSON(_) {

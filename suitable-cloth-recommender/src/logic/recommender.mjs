@@ -25,16 +25,27 @@ class Recommender {
   }
 
   async recommend(relevant_hours = 8, activity = 60) {
-    let forecast = await weather.get_weather_forecast()
-    let feels_like_temperature = (forecast.slice(0, relevant_hours).reduce((acc, hour) => acc + hour.feels_like, 0) / relevant_hours) || 0
-    console.log(feels_like_temperature)
+    let forecast = (await weather.get_weather_forecast()).slice(0, relevant_hours)
 
-    // TODO: Iterate trough each relevant hour and evaluate thermal_sensation (max, min, average), average afterwards
+    return this.cloth_sets.map(cs => {
+      let forecast_sensation = forecast.map(hour =>
+        this.user_model.predict(hour.feels_like, cs.insulation, activity)
+      )
 
-    return this.cloth_sets.map(cl => ({
-      predicted_thermal_sensation: this.user_model.predict(feels_like_temperature, cl.insulation, activity),
-      ...cl
-    })).sort((a, b) => (Math.abs(a.predicted_thermal_sensation) > Math.abs(b.predicted_thermal_sensation)) ? 1 : -1)
+      console.log(forecast_sensation)
+
+      return {
+        predicted_thermal_sensation: {
+          hourly: forecast_sensation,
+          max: Math.max(...forecast_sensation),
+          min: Math.min(...forecast_sensation),
+          mean: forecast_sensation.reduce((acc, ts) => acc + ts, 0) / relevant_hours
+        },
+        ...cs
+      }
+    }).sort((a, b) =>
+      (Math.abs(a.predicted_thermal_sensation.mean) > Math.abs(b.predicted_thermal_sensation.mean)) ? 1 : -1
+    )
   }
 
   async live_feedback(cloth_insulation, activity, thermal_sensation) {
