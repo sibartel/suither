@@ -5,7 +5,7 @@ const API_SECRET = '0c2090b7d93cf61728d4b223dc04a202'
 const DEFAULT_LAT = 49.56
 const DEFAULT_LON = 11.34
 
-const CACHE_DURATION = 5 * 60 * 1000;
+const CACHE_DURATION = 5 * 60 * 1000
 
 let _cache = {
   ts: 0,
@@ -29,7 +29,7 @@ async function get_weather_forecast(lat = DEFAULT_LAT, lon = DEFAULT_LON) {
     const data = await _cached_weather(lat, lon)
     return data.hourly
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 
@@ -38,7 +38,7 @@ async function get_weather_current(lat = DEFAULT_LAT, lon = DEFAULT_LON) {
     const data = await _cached_weather(lat, lon)
     return data.current
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 

@@ -8,12 +8,16 @@ const DEFAULT_WEIGHTS = Matrix.columnVector([7.93, -1.95e-1, -4.6, -1.16e-2])
 
 class UserModel {
   constructor(options) {
-    const {prep_data = [], data = [], model = new Regressor({
+    const {prep_data = [], data = [], model = {
       weights: DEFAULT_WEIGHTS
-    })} = options
+    }} = options
     this._prep_data = prep_data
     this._data = data
-    this._model = model
+    this._model = new Regressor(model)
+  }
+
+  stringify() {
+    return JSON.stringify(this)
   }
 
   toJSON(_) {
