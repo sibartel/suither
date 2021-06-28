@@ -33,6 +33,15 @@ async function get_weather_forecast(lat = DEFAULT_LAT, lon = DEFAULT_LON) {
   }
 }
 
+async function get_weather_today(lat = DEFAULT_LAT, lon = DEFAULT_LON) {
+  try {
+    const data = await _cached_weather(lat, lon)
+    return data.daily[0]
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 async function get_weather_current(lat = DEFAULT_LAT, lon = DEFAULT_LON) {
   try {
     const data = await _cached_weather(lat, lon)
@@ -42,4 +51,4 @@ async function get_weather_current(lat = DEFAULT_LAT, lon = DEFAULT_LON) {
   }
 }
 
-export default {get_weather_forecast, get_weather_current}
+export default {get_weather_forecast, get_weather_today, get_weather_current}
