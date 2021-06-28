@@ -9,7 +9,7 @@ class Recommender {
 
     let user_model = {}
 
-    if(typeof localStorage !== 'undefined')
+    if(typeof localStorage !== 'undefined' && localStorage.getItem('user_model'))
       user_model = JSON.parse(localStorage.getItem('user_model'))
 
     this.user_model = new UserModel(user_model)
