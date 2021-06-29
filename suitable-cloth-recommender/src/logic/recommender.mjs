@@ -39,11 +39,11 @@ export default class Recommender {
       localStorage.setItem('user_model', await this.user_model.stringify())
   }
 
-  async recommend(relevant_hours = 8, activity = 60, filter_categories = []) {
+  async recommend(relevant_hours = 8, activity = 60, category = null) {
     let forecast = (await weather.get_weather_forecast()).slice(0, relevant_hours)
 
     return (await Promise.all(this.cloth_sets.filter(cs => {
-      filter_categories.length === 0 || cs.category.some(c => filter_categories.includes(c))
+      !category || cs.category.includes(category)
     }).map(async cs => {
       let {variants, ...base_variant} = cs
       let cloth_variants = [base_variant, ...variants ?? []]
