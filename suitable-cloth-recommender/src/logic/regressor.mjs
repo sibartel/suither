@@ -2,7 +2,7 @@ import {Matrix} from 'ml-matrix'
 
 export default class Regressor {
   constructor(options) {
-    const {number_epochs = 1e6, batch_size = undefined, learning_rate = 1e-5, weights = undefined} = options
+    const {number_epochs = 5e3, batch_size = undefined, learning_rate = 1e-4, weights = undefined} = options
     this.number_epochs = number_epochs
     this.batch_size = batch_size
     this.learning_rate = learning_rate
@@ -18,7 +18,7 @@ export default class Regressor {
     }
   }
 
-  train(features, target) {
+  train(features, target, quiet=false) {
     features = Matrix.checkMatrix(features)
     target = Matrix.checkMatrix(target)
 
@@ -40,11 +40,13 @@ export default class Regressor {
         weights = weights.add(gradient.mul(this.learning_rate))
         sum_squared_error += error.pow(2).transpose().mmul(Matrix.ones(error.rows, 1)).get(0, 0)
       }
-      console.log(`Epoch: ${epoch}/${this.number_epochs}; MSE: ${sum_squared_error / features.rows}`)
+      if (!quiet)
+        console.log(`Epoch: ${epoch}/${this.number_epochs}; MSE: ${sum_squared_error / features.rows}`)
     }
 
     this.weights = weights;
-    console.log(`Final weights: ${weights}`)
+    if (!quiet)
+      console.log(`Final weights: ${weights}`)
   }
 
   predict(features, weights) {
