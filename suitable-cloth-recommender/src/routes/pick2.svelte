@@ -14,6 +14,7 @@
 	import Recommender from "../logic/recommender.mjs"
 
 	let option = 1;
+	let recs = []
 	
 	const handleClick = () => {
 		goto('/pick')
@@ -23,18 +24,18 @@
 	}
 
 	let r = new Recommender(cloth_sets, default_model_data)
-	r.recommend(4, 60).then((r) => console.log(r))
+	r.recommend(4, 60).then((r) => recs = r)
 
 	let temp = 0;
 	weather.get_weather_current().then(forecast => temp = forecast.feels_like);
 
 	let rain_perc = 0;
-	weather.get_weather_current().then(forecast => console.log(forecast));
+	weather.get_weather_current().then(forecast => console.log(''));
 
 </script>
 
 <svelte:head>
-	<title>Pick2</title>
+	<title>Pick</title>
 </svelte:head>
 
 <div>
@@ -46,12 +47,14 @@
 
 {#each recs as rec}
 	<div>
-		{rec.description} : {rec.predicted_thermal_sensation}
+		{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}
 	</div>	
+	<img src={rec.filename} alt="">
+	<input type=radio>
 {:else}
 	<p></p>	
 {/each}
-
+<!-- 
 <div>
     <p>
 	<img src="2000px-Stick_Figure.svg.png" alt="">
@@ -73,4 +76,8 @@
     </p>
 
     Selected Option: {option}
-</div>
+</div> -->
+<p>
+	<button on:click={handleClick}>Back</button>
+	<button on:click={handleClick2}>Finish</button>
+</p>

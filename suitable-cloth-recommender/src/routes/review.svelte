@@ -60,7 +60,7 @@
 
 
 <p>	
-	<img src="2000px-Stick_Figure.svg.png" alt=""> 
+	<img src="longlong.jpg" alt=""> 
 </p>
 
 <p>
