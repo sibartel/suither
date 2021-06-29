@@ -25,7 +25,7 @@ export default class Regressor {
     let weights = this.weights ?? Matrix.zeros(1 + features.columns, 1)
 
     for (let epoch = 0; epoch < this.number_epochs; epoch++) {
-      let cum_error = 0
+      let sum_squared_error = 0
       for (let rows of batched_indices(features.rows, this.batch_size ?? features.rows)) {
         const step_features = features.subMatrixRow(rows)
         const step_target = target.subMatrixRow(rows)
@@ -38,9 +38,9 @@ export default class Regressor {
           mod_features.mulColumnVector(error).transpose().mean('row')
         )
         weights = weights.add(gradient.mul(this.learning_rate))
-        cum_error += error.abs().transpose().mmul(Matrix.ones(error.rows, 1)).get(0, 0)
+        sum_squared_error += error.pow(2).transpose().mmul(Matrix.ones(error.rows, 1)).get(0, 0)
       }
-      console.log(`Epoch ${epoch}/${this.number_epochs}: ${cum_error / features.rows}`)
+      console.log(`Epoch: ${epoch}/${this.number_epochs}; MSE: ${sum_squared_error / features.rows}`)
     }
 
     this.weights = weights;
