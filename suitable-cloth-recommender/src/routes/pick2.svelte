@@ -26,7 +26,6 @@
 	onDestroy(unsubscribe);
 
 	let option = 1;
-	let recs = [];
 	
 	const handleClick = () => {
 		goto('/pick')
@@ -41,32 +40,10 @@
 		goto('/review')
 	}
 
-	recs = [{description: "no clothes", filename: "2000px-Stick_Figure.svg.png", mean: "20"}, {description: "shirt, long trousers", filename: "shortlong.jpg"},
-			{description: "suit", filename: "longlong.jpg"}, {description: "short shirt, walking shorts", filename: "shortshort.png"}]
-	/* let r = new Recommender(cloth_sets, default_model_data)
-	r.recommend(4, 60).then((r) => recs = r) */
-	
-    recs = Recommender.get().then(async r => {
+    let recs = Recommender.get().then(async r => {
   		await r.reset_model(0)
-  		console.log(await r.recommend(4, 60))
-  		await r.feedback(25, 0.6, 60, 0.1) 
-	})  
- 
-	Recommender.get().then(async r => {
-  	await r.reset_model(0)
-  	console.log(await r.recommend(4, 60))
-  	await r.feedback(25, 0.6, 60, 0.1)
+  		return r.recommend(4, 60, null, true)
 	})
-	
-	 /* async function update() {
-		recs = Recommender.get().then(async r => {
-  		await r.reset_model(0)
-  		console.log(await r.recommend(4, 60))
-  		await r.feedback(25, 0.6, 60, 0.1) 
-		})} */ 
-	console.log('here');
-	console.log(recs);
-
 </script>
 
 <svelte:head>
@@ -83,7 +60,15 @@
 {#await recs}
 	<p>...generating</p>
 {:then recs}
-	<p>The number is {recs}</p>
+	{#each recs as rec}
+		<Tooltip title={rec.description}>
+			{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)} 
+			<img src={rec.filename} alt="">
+		</Tooltip>	
+		<input type=radio>
+	{:else}
+		<p>No recommendations found, answer from recommender: {JSON.stringify(recs)}</p>	
+	{/each}
 {:catch error}
 	<p style="color: red">{error.message}</p>
 {/await}

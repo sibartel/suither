@@ -44,9 +44,7 @@ export default class Recommender {
   async recommend(relevant_hours = 8, activity = 60, category = null, ignore_rain = false) {
     let forecast = (await weather.get_weather_forecast()).slice(0, relevant_hours)
 
-    return (await Promise.all(this.cloth_sets.filter(cs => {
-      !category || cs.category.includes(category)
-    }).map(async cs => {
+    return (await Promise.all(this.cloth_sets.map(async cs => {
       let {variants, ...base_variant} = cs
       let cloth_variants = [base_variant, ...variants ?? []]
 
