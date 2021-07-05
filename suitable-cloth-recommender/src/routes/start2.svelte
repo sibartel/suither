@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-	<title>Start2</title>
+	<title>Start</title>
  </svelte:head>
 
 <h1>Getting started</h1>

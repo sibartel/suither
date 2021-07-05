@@ -1,6 +1,14 @@
 <script>
 	import Nav from '../components/Nav.svelte';
+	import { dataStore } from "../stores/dataStore.js"
+	import { onDestroy } from "svelte";
 	export let segment;
+
+	let data;
+	const unsubscribe = dataStore.subscribe(value => {
+		data = value;
+	});
+	onDestroy(unsubscribe);
 </script>
 
 <style>

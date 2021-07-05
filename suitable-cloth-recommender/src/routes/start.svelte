@@ -13,19 +13,32 @@
 
 <script>
   	import {goto} from '@sapper/app';
-	import {Slider} from 'svelte-materialify'
+	import {Slider} from 'svelte-materialify';
+	import { dataStore } from "../stores/dataStore.js"
+	import { onDestroy } from "svelte";
 
-	let name = '';
+	let data;
+	const unsubscribe = dataStore.subscribe(value => {
+		data = value;
+	});
+	onDestroy(unsubscribe);
+
+	let name = data.name;
 	let age = '';
 	let weight = '';
 	let heigth = '';
-	let heat = 0.0;
+	let heat = data.heat_self_assesment;
 	let min = -300;
 	let max = 300;
 
 	const handleClick = () => {
-		console.log(heat);
-		goto('/start2')
+		dataStore.update(current => {
+			current.name = name;
+			current.heat_self_assesment = heat;
+			return current;
+		}) 
+		console.log(data);
+		goto('/pick')
 	}
 
 	//const emojis = ['❄️ ❄️ ❄️ ', '❄️ ❄️ ', '❄️ ', '☁️', '🔥', '🔥🔥', '🔥🔥🔥'];
@@ -41,7 +54,7 @@
 <p>Name
 	<input bind:value={name}>
 </p>
-<div>
+<!-- <div>
 <p>Gender
 	<label>
 		<input type=checkbox>
@@ -69,7 +82,8 @@
 <p>Heigth
 	<input bind:value={heigth}>
 	cm
-</p>
+</p> -->
+
 <p> Heat self assesment
 	
 	<Slider {min} {max} bind:value={heat}>

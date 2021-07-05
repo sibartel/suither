@@ -12,24 +12,41 @@
 </style>
 
 <script>	
-	import {Slider, Divider} from 'svelte-materialify'
-	import weather from "../logic/weather-api.mjs"
-/* 	import {option} from './pick2.svelte'
- */
+	import {Slider} from 'svelte-materialify';
+	import WeatherBar from '../components/WeatherBar.svelte';
+	import { dataStore } from "../stores/dataStore.js"
+	import { onDestroy } from "svelte";
+
+	let data;
+	const unsubscribe = dataStore.subscribe(value => {
+		data = value;
+	});
+	onDestroy(unsubscribe);
+
+
 	let min = -300;
 	let max = 300;
 
-	
+	let ctime = new Date();
 
-	let reviews = [
-		{time: '9:40', feeling: -210, id: 0},
-		{time: '11:30', feeling: 100, id: 1},
-		{time: '12:59', feeling: 10, id: 2},
-	]
+	// these automatically update when `time`
+	// changes, because of the `$:` prefix
+	$: hours = ctime.getHours();
+	$: minutes = ctime.getMinutes();
+	$: current_time = hours + ":" + zeroFill(minutes, 2);
 
-	let time = '16:40';
+	function zeroFill( number, width ){
+  		width -= number.toString().length;
+  		if ( width > 0){
+    	return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+  		}
+  		return number + ""; // always return a string
+	}
+
+	let reviews = data.reviews;
+
 	let feeling = 0;
-	let id = 2;
+	let id = 0;
 
 
 	 function handleClick() {
@@ -37,16 +54,21 @@
 
 	const addReview = () => {
 		id++;
-		reviews = reviews.concat({time, feeling, id});
+		reviews = reviews.concat({time: current_time, feeling, id});
 		console.log(reviews);
+		dataStore.update(current => {
+			current.reviews = reviews;
+			return current;
+		}) 
 	}
 
 	const deleteReview = (id) => {
 		reviews = reviews.filter((review) => review.id != id)
+		dataStore.update(current => {
+			current.reviews = reviews;
+			return current;
+		}) 
 	}
-
-	let temp = 0;
-	weather.get_weather_current().then(forecast => temp = forecast.feels_like);
 </script>
 
 <svelte:head>
@@ -55,17 +77,16 @@
 
 <h1>Review todays outfit</h1>
 
-<p>Todays weather 🌤 {temp}°C 🌧 10%
-</p>
+<WeatherBar/>
 
 
 <p>	
-	<img src="longlong.jpg" alt=""> 
+	<img src={data.outfit_picture} alt=""> 
 </p>
 
 <p>
 	Time
-	<input bind:value={time}>
+	<input bind:value={current_time}>
 	<button on:click={addReview}>
 		Add Review
 	</button>
