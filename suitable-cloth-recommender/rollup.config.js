@@ -9,6 +9,7 @@ import { terser } from 'rollup-plugin-terser';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 import OMT from '@surma/rollup-plugin-off-main-thread';
+import sveltePreprocess from "svelte-preprocess";
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -18,6 +19,12 @@ const onwarn = (warning, onwarn) =>
 	(warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
 	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
 	onwarn(warning);
+
+const preprocess = sveltePreprocess({
+	scss: {
+		includePaths: ["theme"],
+	},
+});
 
 export default {
 	client: {
@@ -34,8 +41,10 @@ export default {
 			svelte({
 				compilerOptions: {
 					dev,
-					hydratable: true
-				}
+					hydratable: true,
+				},
+				emitCss: true,
+				preprocess
 			}),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
@@ -91,7 +100,8 @@ export default {
 					generate: 'ssr',
 					hydratable: true
 				},
-				emitCss: false
+				emitCss: false,
+				preprocess
 			}),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
