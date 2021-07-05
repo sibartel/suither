@@ -8,12 +8,12 @@
 </style>
 
 <script>
-	import { goto } from '@sapper/app';
+	import Recommender from "../logic/recommender.mjs"
 	import WeatherBar from '../components/WeatherBar.svelte' ;
 	import { dataStore } from "../stores/dataStore.js"
 	import { onDestroy } from "svelte";
 
-	import {Slider, Button} from 'svelte-materialify/src'
+	import {Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
 
 	let data;
 	const unsubscribe = dataStore.subscribe(value => {
@@ -26,6 +26,12 @@
 	let activity_int = data.activity_level;
 	let min=45; let max=400;
 
+	$: recs = Recommender.get().then(async r => {
+		await r.reset_model(0) // model should not be resetted here
+		// TODO add categorie and rain ignore boolean
+		return r.recommend(hours_to_spent, activity_int, null, true)
+	})
+
 	const handleClick = () => {
 		dataStore.update(current => {
 			current.activity = topic;
@@ -33,8 +39,6 @@
 			current.activity_level = activity_int;
 			return current;
 		})
-		
-		goto('/pick2')
 	}
 	
 </script>
@@ -89,4 +93,25 @@ Hours to spent:
 </Slider>
 </p>
 
-<Button on:click={handleClick}>Select</Button>
+<Divider />
+
+{#await recs}
+	<ProgressCircular indeterminate color="primary" />
+{:then recs}
+	<div class="d-flex flex-wrap justify-space-around mt-4 mb-4">
+	{#each recs as rec}
+		<Card style="max-width:350px; margin: 15px 0;">
+			<img src={rec.filename} alt="">
+			<CardTitle>{rec.description}</CardTitle>
+			<CardSubtitle>{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
+			<CardActions>
+				<Button text class="primary-text">Select</Button>
+			</CardActions>
+		</Card>
+	{:else}
+		<p>No recommendations found, answer from recommender: {JSON.stringify(recs)}</p>	
+	{/each}
+	</div>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
