@@ -1,19 +1,19 @@
 <style>
-	input {
-		background-color: rgb(255, 255, 255);
+	fieldset {
+		border: none;
 	}
-	p {
-		max-width: 400px;
+
+	.fields {
+		margin-left: 20px;
 	}
 </style>
 
 <script>
 	import Recommender from "../logic/recommender.mjs"
-	import WeatherBar from '../components/WeatherBar.svelte' ;
 	import { dataStore } from "../stores/dataStore.js"
 	import { onDestroy } from "svelte";
 
-	import {Radio, Switch, Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
+	import {TextField, Radio, Switch, Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
 
 	let data;
 	const unsubscribe = dataStore.subscribe(value => {
@@ -49,28 +49,51 @@
 	<title>Suither</title>
 </svelte:head>
 
-<WeatherBar/>
+<fieldset>
+	<legend>How long are we out today?</legend>
+	<div class="fields">
+		<Slider step={1} bind:value={hours_to_spent} thumb min={1} max={16}>
+			<span slot="append-outer">
+				<TextField bind:value={hours_to_spent} style="width: 80px;">
+					<div slot="append">
+						hours
+					</div>
+				</TextField>
+			</span>
+		</Slider>
+	</div>
+</fieldset>
 
-<Radio bind:group={category} value={null}>All</Radio>
-{#each categories as c}
-	<Radio bind:group={category} value={c}>{c}</Radio>
-{/each}
+<fieldset>
+	<legend>How hard will we push ourselves physically today?</legend>
+	<div class="fields">
+		<Slider {min} {max} bind:value={activity_int}>
+			<span slot="prepend-outer">
+				Relax
+			</span>
+			<span slot="append-outer">
+				Heavy Sport
+			</span>
+		</Slider>
+	</div>
+</fieldset>
 
-Hours to spent:
-<input bind:value={hours_to_spent}>
+<fieldset>
+	<legend>What style do we wear today?</legend>
+	<div class="fields">
+		<Radio bind:group={category} value={null}>Show me all</Radio>
+		{#each categories as c}
+			<Radio bind:group={category} value={c}>{c}</Radio>
+		{/each}
+	</div>
+</fieldset>
 
-<Switch bind:checked={ignore_rain}>Ignore rain</Switch>
-
-<p>
-<Slider {min} {max} bind:value={activity_int}>
-	<span slot="prepend-outer">
-		Relax
-	</span>
-	<span slot="append-outer">
-		Heavy Sport
-	  </span>
-</Slider>
-</p>
+<fieldset>
+	<legend>Any other things you want me to consider?</legend>
+	<div class="fields">
+		<Switch bind:checked={ignore_rain}>Ignore rain</Switch>
+	</div>
+</fieldset>
 
 <Divider />
 

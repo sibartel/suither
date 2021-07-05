@@ -9,4 +9,4 @@
 </script>
 
 
-Todays weather 🌤 {temp}°C 🌧 {rain_perc * 100}%
+🌤 {temp}°C 🌧 {rain_perc * 100}%
