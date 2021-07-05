@@ -3,6 +3,8 @@ import { wrap } from 'comlink'
 import weather from './weather-api.mjs'
 import {cloth_sets} from './cloth_sets.mjs'
 
+const PRECIPITATION_THRESHOLD = 0.3
+
 let instance = null
 
 export default class Recommender {
@@ -39,7 +41,7 @@ export default class Recommender {
       localStorage.setItem('user_model', await this.user_model.stringify())
   }
 
-  async recommend(relevant_hours = 8, activity = 60, category = null) {
+  async recommend(relevant_hours = 8, activity = 60, category = null, ignore_rain = false) {
     let forecast = (await weather.get_weather_forecast()).slice(0, relevant_hours)
 
     return (await Promise.all(this.cloth_sets.filter(cs => {
@@ -51,10 +53,17 @@ export default class Recommender {
       let forecast_sensation = await Promise.all(forecast.map(async hour => {
         return (await Promise.all(cloth_variants.map(async cv => ({
           predicted_thermal_sensation: await this.user_model.predict(hour.feels_like, cv.insulation, activity),
+          precipitation_suitable: hour.pop < PRECIPITATION_THRESHOLD || cv.waterproof,
           ...cv
-        })))).reduce((p, c) =>
-          Math.abs(p.predicted_thermal_sensation) < Math.abs(c.predicted_thermal_sensation) ? p : c
-        )
+        })))).reduce((p, c) => {
+          if (!ignore_rain) {
+            if (c.precipitation_suitable && !p.precipitation_suitable)
+              return  c
+            else if(p.precipitation_suitable && !c.precipitation_suitable)
+              return p
+          }
+          return Math.abs(p.predicted_thermal_sensation) < Math.abs(c.predicted_thermal_sensation) ? p : c
+        })
       }))
 
       return {
@@ -65,9 +74,10 @@ export default class Recommender {
           mean: forecast_sensation.map(data => data.predicted_thermal_sensation)
             .reduce((acc, ts) => acc + ts, 0) / relevant_hours
         },
+        precipitation_suitable: forecast_sensation.every(hour => hour.precipitation_suitable),
         ...cs
       }
-    }))).sort((a, b) =>
+    }))).filter(cs => ignore_rain || cs.precipitation_suitable).sort((a, b) =>
       (Math.abs(a.predicted_thermal_sensation.mean) > Math.abs(b.predicted_thermal_sensation.mean)) ? 1 : -1
     )
   }
