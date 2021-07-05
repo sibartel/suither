@@ -8,16 +8,13 @@
 
 <script>
 	import { goto } from '@sapper/app';
-	import Tooltip from '../components/Tooltip.svelte';
-	import { onMount } from 'svelte';
 
-	import {cloth_sets} from "../logic/cloth_sets.mjs"
-	import {default_model_data} from "../logic/default_model_data.mjs"
 	import Recommender from "../logic/recommender.mjs"
-	import About from './about.svelte';
 	import WeatherBar from '../components/WeatherBar.svelte';
 	import { dataStore } from "../stores/dataStore.js"
 	import { onDestroy } from "svelte";
+
+	import {Button, Card, CardTitle, CardSubtitle, CardActions} from 'svelte-materialify/src'
 
 	let data;
 	const unsubscribe = dataStore.subscribe(value => {
@@ -60,18 +57,28 @@
 {#await recs}
 	<p>...generating</p>
 {:then recs}
+	<div class="d-flex flex-wrap justify-space-around mt-4 mb-4">
 	{#each recs as rec}
-		<Tooltip title={rec.description}>
-			{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)} 
+		<Card style="max-width:350px; margin: 15px 0;">
 			<img src={rec.filename} alt="">
-		</Tooltip>	
-		<input type=radio>
+			<CardTitle>{rec.description}</CardTitle>
+			<CardSubtitle>{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
+			<CardActions>
+				<Button text class="primary-text">Select</Button>
+			</CardActions>
+		</Card>
 	{:else}
 		<p>No recommendations found, answer from recommender: {JSON.stringify(recs)}</p>	
 	{/each}
+	</div>
 {:catch error}
 	<p style="color: red">{error.message}</p>
 {/await}
+
+<p>
+	<Button on:click={handleClick}>Back</Button>
+	<Button on:click={handleClick2}>Finish</Button>
+</p>
 
 <!-- <button on:click={update}>generate</button>
 
@@ -84,11 +91,6 @@
 {:else}
 	<p></p>	
 {/each} -->
-
-<p>
-	<button on:click={handleClick}>Back</button>
-	<button on:click={handleClick2}>Finish</button>
-</p>
 
 <!-- {#if recs.length > 3}
 <div>

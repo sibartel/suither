@@ -9,10 +9,11 @@
 
 <script>
 	import { goto } from '@sapper/app';
-	import {Slider} from 'svelte-materialify';
 	import WeatherBar from '../components/WeatherBar.svelte' ;
 	import { dataStore } from "../stores/dataStore.js"
 	import { onDestroy } from "svelte";
+
+	import {Slider, Button} from 'svelte-materialify/src'
 
 	let data;
 	const unsubscribe = dataStore.subscribe(value => {
@@ -88,4 +89,4 @@ Hours to spent:
 </Slider>
 </p>
 
-<button on:click={handleClick}>	Select </button>
+<Button on:click={handleClick}>Select</Button>
