@@ -100,8 +100,8 @@ Hours to spent:
 {:then recs}
 	<div class="d-flex flex-wrap justify-space-around mt-4 mb-4">
 	{#each recs as rec}
-		<Card style="max-width:350px; margin: 15px 0;">
-			<img src={rec.filename} alt="">
+		<Card style="max-width:350px; margin: 15px 10px;">
+			<img style="max-width: 100%;" src={rec.filename} alt="">
 			<CardTitle>{rec.description}</CardTitle>
 			<CardSubtitle>{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
 			<CardActions>
