@@ -9,6 +9,7 @@
     "start": "node __sapper__/build"
   },
   "dependencies": {
+    "@mdi/js": "^5.9.55",
     "@surma/rollup-plugin-off-main-thread": "^2.2.2",
     "axios": "^0.21.1",
     "comlink": "^4.3.1",

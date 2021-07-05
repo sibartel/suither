@@ -13,6 +13,10 @@ export default class Recommender {
     this.user_model = null
   }
 
+  static get_categories() {
+    return [...new Set(cloth_sets.map(cs => cs.category).flat())]
+  }
+
   static async get() {
     if (!instance) {
       instance = new Recommender(cloth_sets)

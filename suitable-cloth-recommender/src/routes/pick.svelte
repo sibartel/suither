@@ -13,7 +13,7 @@
 	import { dataStore } from "../stores/dataStore.js"
 	import { onDestroy } from "svelte";
 
-	import {Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
+	import {Radio, Switch, Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
 
 	let data;
 	const unsubscribe = dataStore.subscribe(value => {
@@ -21,20 +21,22 @@
 	});
 	onDestroy(unsubscribe);
 	
-	let topic = data.activity;
+	let category = null;
 	let hours_to_spent = data.hours_to_spent;
 	let activity_int = data.activity_level;
+	let ignore_rain = true;
 	let min=45; let max=400;
+
+	let categories = Recommender.get_categories()
 
 	$: recs = Recommender.get().then(async r => {
 		await r.reset_model(0) // model should not be resetted here
-		// TODO add categorie and rain ignore boolean
-		return r.recommend(hours_to_spent, activity_int, null, true)
+		return r.recommend(hours_to_spent, activity_int, category, ignore_rain)
 	})
 
 	const handleClick = () => {
 		dataStore.update(current => {
-			current.activity = topic;
+			current.activity = category;
 			current.hours_to_spent = hours_to_spent;
 			current.activity_level = activity_int;
 			return current;
@@ -44,43 +46,20 @@
 </script>
 
 <svelte:head>
-	<title>Pick</title>
- </svelte:head>
-
-<h1>Pick todays activity</h1>
+	<title>Suither</title>
+</svelte:head>
 
 <WeatherBar/>
 
-
-<p>
-<label>
-	<input type=radio bind:group={topic} value={'Basic'}>
-	Basic
-</label>
-</p>
-
-<p>
-<label>
-	<input type=radio bind:group={topic} value={"Sport"}>
-	Sport
-</label>
-</p>
-
-<p>
-<label>
-	<input type=radio bind:group={topic} value={"Free time"}>
-	Free time
-</label>
-</p>
-<p>
-<label>
-	<input type=radio bind:group={topic} value={"Business"}>
-	Business
-</label>
-</p>
+<Radio bind:group={category} value={null}>All</Radio>
+{#each categories as c}
+	<Radio bind:group={category} value={c}>{c}</Radio>
+{/each}
 
 Hours to spent:
 <input bind:value={hours_to_spent}>
+
+<Switch bind:checked={ignore_rain}>Ignore rain</Switch>
 
 <p>
 <Slider {min} {max} bind:value={activity_int}>
@@ -95,23 +74,23 @@ Hours to spent:
 
 <Divider />
 
-{#await recs}
-	<ProgressCircular indeterminate color="primary" />
-{:then recs}
-	<div class="d-flex flex-wrap justify-space-around mt-4 mb-4">
-	{#each recs as rec}
-		<Card style="max-width:350px; margin: 15px 10px;">
-			<img style="max-width: 100%;" src={rec.filename} alt="">
-			<CardTitle>{rec.description}</CardTitle>
-			<CardSubtitle>{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
-			<CardActions>
-				<Button text class="primary-text">Select</Button>
-			</CardActions>
-		</Card>
-	{:else}
-		<p>No recommendations found, answer from recommender: {JSON.stringify(recs)}</p>	
-	{/each}
-	</div>
-{:catch error}
-	<p style="color: red">{error.message}</p>
-{/await}
+<div class="d-flex flex-wrap justify-space-around mt-4 mb-4">
+	{#await recs}
+		<ProgressCircular indeterminate color="primary" />
+	{:then recs}
+		{#each recs as rec}
+			<Card style="max-width:350px; margin: 15px 10px;">
+				<img style="max-width: 100%;" src={rec.filename} alt="">
+				<CardTitle style="word-break: normal;">{rec.description}</CardTitle>
+				<CardSubtitle>{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
+				<CardActions>
+					<Button text class="primary-text">Select</Button>
+				</CardActions>
+			</Card>
+		{:else}
+			<p>No recommendations found, answer from recommender: {JSON.stringify(recs)}</p>	
+		{/each}
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
+</div>

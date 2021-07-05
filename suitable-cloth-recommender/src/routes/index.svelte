@@ -36,9 +36,7 @@
 </style>
 
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Home</title>
 </svelte:head>
 
-<h1>Home</h1>
-
-<p>The name is {data.name} </p>
+<a href="pick">Get Started</a>

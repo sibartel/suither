@@ -1,30 +1,23 @@
 <script>
-	import Nav from '../components/Nav.svelte';
-	import { dataStore } from "../stores/dataStore.js"
-	import { onDestroy } from "svelte";
-	export let segment;
-
-	let data;
-	const unsubscribe = dataStore.subscribe(value => {
-		data = value;
-	});
-	onDestroy(unsubscribe);
+	import {MaterialApp, AppBar, Menu, ListItem, Button, Icon} from 'svelte-materialify/src'
+	import { mdiDotsVertical } from '@mdi/js'
 </script>
 
-<style>
-	main {
-		position: relative;
-		max-width: 56em;
-		background-color: rgb(247, 245, 245);
-		padding: 2em;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-	
-</style>
+<MaterialApp theme="light">
+	<AppBar>
+		<span slot="title">Suither</span>
+		<div style="flex-grow:1" />
+		<Menu right>
+		  <div slot="activator">
+			<Button fab depressed>
+			  <Icon path={mdiDotsVertical} />
+			</Button>
+		  </div>
+		  <ListItem>Reset model</ListItem>
+		  <ListItem>Infos for nerds</ListItem>
+		  <ListItem>About</ListItem>
+		</Menu>
+	</AppBar>
 
-<Nav {segment}/>
-
-<main>
-	<slot></slot>
-</main> 
+	<slot />
+</MaterialApp> 
