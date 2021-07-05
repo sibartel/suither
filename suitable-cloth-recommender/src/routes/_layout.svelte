@@ -2,17 +2,23 @@
 	import { MaterialApp, AppBar, Menu, ListItem, Button, Icon} from 'svelte-materialify/src'
 	import { mdiDotsVertical } from '@mdi/js'
 	import WeatherBar from '../components/WeatherBar.svelte'
+	import {goto} from '@sapper/app'
 </script>
 
 <style>
 	.main {
 		padding: 5px 10px;
 	}
+
+	.nav-link {
+		text-decoration: none;
+		color: black;
+	}
 </style>
 
 <MaterialApp theme="light">
 	<AppBar>
-		<span slot="title">Suither</span>
+		<a class="nav-link" slot="title" href="/">Suither</a>
 		<div style="flex-grow:1" />
 		<span><WeatherBar /></span>
 		<Menu right>
@@ -21,9 +27,9 @@
 			  <Icon path={mdiDotsVertical} />
 			</Button>
 		  </div>
-		  <ListItem>Reset model</ListItem>
+		  <ListItem on:click={() => goto('reset')}>Reset model</ListItem>
 		  <ListItem>Infos for nerds</ListItem>
-		  <ListItem>About</ListItem>
+		  <ListItem on:click={() => goto('about')}>About</ListItem>
 		</Menu>
 	</AppBar>
 

@@ -2,6 +2,7 @@
 	<title>About</title>
 </svelte:head>
 
-<h1>Getting started</h1>
+<h4>Authors</h4>
 
-<p> This is the 'about' page. There's not much here.</p>
+<p>Enrico Kögler</p>
+<p>Silas Bartel</p>

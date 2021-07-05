@@ -105,7 +105,7 @@
 			<Card style="max-width:350px; margin: 15px 10px;">
 				<img style="max-width: 100%;" src={rec.filename} alt="">
 				<CardTitle style="word-break: normal;">{rec.description}</CardTitle>
-				<CardSubtitle>{rec.description} : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
+				<CardSubtitle>Mean : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
 				<CardActions>
 					<Button text class="primary-text">Select</Button>
 				</CardActions>
