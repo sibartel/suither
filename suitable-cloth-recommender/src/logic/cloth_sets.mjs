@@ -49,7 +49,8 @@ export let cloth_sets = [
     variants: [
       {
         description: 'jacket on',
-        insulation: 0.92
+        insulation: 0.92,
+        waterproof: true
       }
     ],
   },
@@ -79,7 +80,8 @@ export let cloth_sets = [
     variants: [
       {
         description: 'jacket on',
-        insulation: 0.96
+        insulation: 0.96,
+        waterproof: true
       }
     ]
   },
