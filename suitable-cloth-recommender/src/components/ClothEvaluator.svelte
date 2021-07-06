@@ -8,7 +8,7 @@
 </style>
 
 <script>	
-	import { Divider, Slider, Button } from 'svelte-materialify'
+	import { Divider, Slider, Button } from 'svelte-materialify/src'
 	import { dataStore } from '../stores/dataStore.js'
 	import ClothCard from '../components/ClothCard.svelte'
 

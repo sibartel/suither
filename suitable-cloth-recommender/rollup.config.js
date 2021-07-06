@@ -22,7 +22,7 @@ const onwarn = (warning, onwarn) =>
 
 const preprocess = sveltePreprocess({
 	scss: {
-		includePaths: ["theme"],
+		includePaths: ['theme'],
 	},
 });
 
