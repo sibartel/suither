@@ -37,7 +37,7 @@
 			</Button>
 		  </div>
 		  <ListItem on:click={() => goto('reset')}>Reset model</ListItem>
-		  <ListItem>Infos for nerds</ListItem>
+		  <ListItem on:click={() => goto('info')}>Info for nerds</ListItem>
 		  <ListItem on:click={() => goto('about')}>About</ListItem>
 		</Menu>
 	</AppBar>
