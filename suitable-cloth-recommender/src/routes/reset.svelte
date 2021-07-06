@@ -9,30 +9,20 @@
 </style>
 
 <script>
-  	import {goto} from '@sapper/app';
-	import {Button, Slider, Alert, Icon} from 'svelte-materialify/src';
+  	import {goto} from '@sapper/app'
+	import {Button, Slider, Alert, Icon} from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
+	import Recommender from "../logic/recommender.mjs"
 	import { dataStore } from "../stores/dataStore.js"
-	import { onDestroy } from "svelte";
 
-	let data;
-	const unsubscribe = dataStore.subscribe(value => {
-		data = value;
-	});
-	onDestroy(unsubscribe);
+	// On each load the value used to reset the model should be displayed and not the last selected
+	let current_selection = $dataStore.self_assessed_sensation_deviation
 
-	let name = data.name;
-	let thermal_sensation = data.heat_self_assesment;
-
-	const handleClick = async () => {
-		dataStore.update(current => {
-			current.name = name;
-			current.heat_self_assesment = thermal_sensation;
-			return current;
-		})
+	const resetModel = async () => {
+		$dataStore.self_assessed_sensation_deviation = current_selection
 
 		await Recommender.get().then(async r => {
-			await r.reset_model(thermal_sensation / 2)
+			await r.reset_model($dataStore.self_assessed_sensation_deviation / 2)
 		})
 
 		goto('/pick')
@@ -51,7 +41,7 @@
 <fieldset>
 	<legend>How would you self assess your thermal sensitivity?</legend>
 	<div class="fields">
-		<Slider step={1} thumb min={-10} max={10} bind:value={thermal_sensation}>
+		<Slider step={1} thumb min={-10} max={10} bind:value={current_selection}>
 			<span slot="prepend-outer">
 				❄️
 			</span>
@@ -69,4 +59,4 @@
 	By proceeding the user model will be resetted. All already aquired feedback data will be lost!
 </Alert>
 
-<Button class="red white-text" on:click={handleClick}>Reset Model</Button>
+<Button class="red white-text" on:click={resetModel}>Reset Model</Button>

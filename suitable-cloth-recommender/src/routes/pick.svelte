@@ -14,7 +14,7 @@
 
 	import {TextField, Radio, Switch, Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
 
-	let categories = Recommender.get_categories()
+	const categories = Recommender.get_categories()
 
 	$: recs = Recommender.get().then(async r => {
 		await r.reset_model(0) // model should not be resetted here, check for cold-start
@@ -101,7 +101,7 @@
 				</CardActions>
 			</Card>
 		{:else}
-			<p>No recommendations found, answer from recommender: {JSON.stringify(recs)}</p>	
+			<p>No recommendations found, maybe adjust the settings. Answer from recommender: {JSON.stringify(recs)}</p>	
 		{/each}
 	{:catch error}
 		<p style="color: red">{error.message}</p>

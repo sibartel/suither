@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dataStore = writable(
     {
-        heat_self_assesment: 0.0,
+        self_assessed_sensation_deviation: 0.0,
         current_cloth_set: null,
         recommender_settings: {
             relevant_hours: 5,
