@@ -19,8 +19,9 @@ export default class Recommender {
 
   static async get() {
     if (!instance) {
-      instance = new Recommender(cloth_sets)
-      await instance.init()
+      let new_instance = new Recommender(cloth_sets)
+      await new_instance.init()
+      instance = new_instance
     }
     return instance
   }
