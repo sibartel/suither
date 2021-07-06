@@ -3,10 +3,11 @@
 </svelte:head>
 
 <script>
+	import { goto } from '@sapper/app'
 	import { MaterialApp, AppBar, Menu, ListItem, Button, Icon} from 'svelte-materialify/src'
 	import { mdiDotsVertical } from '@mdi/js'
 	import WeatherBar from '../components/WeatherBar.svelte'
-	import {goto} from '@sapper/app'
+	import { dataStore } from '../stores/dataStore.js'
 </script>
 
 <style>
@@ -16,7 +17,7 @@
 
 	.nav-link {
 		text-decoration: none;
-		color: black;
+		color: unset;
 	}
 
 	.text-logo {
@@ -25,7 +26,7 @@
 	}
 </style>
 
-<MaterialApp theme="light">
+<MaterialApp theme="{$dataStore.theme}">
 	<AppBar>
 		<a class="text-logo nav-link" slot="title" href="/">Suither</a>
 		<div style="flex-grow:1" />
@@ -37,6 +38,7 @@
 			</Button>
 		  </div>
 		  <ListItem on:click={() => goto('reset')}>Reset model</ListItem>
+		  <ListItem on:click={() => $dataStore.theme = $dataStore.theme === 'dark' ? 'light' : 'dark'}>Switch theme</ListItem>
 		  <ListItem on:click={() => goto('info')}>Info for nerds</ListItem>
 		  <ListItem on:click={() => goto('about')}>About</ListItem>
 		</Menu>

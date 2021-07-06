@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 const key = 'data_store'
 
 let stored_data = {
+    theme: 'dark',
     self_assessed_sensation_deviation: 0.0,
     current_cloth_set: null,
     recommender_settings: {
@@ -15,7 +16,10 @@ let stored_data = {
 }
 
 if (typeof localStorage !== 'undefined' && localStorage.getItem(key))
-    stored_data = JSON.parse(localStorage.getItem(key))
+    stored_data = {
+        ...stored_data,
+        ...JSON.parse(localStorage.getItem(key))
+    }
 
 export const dataStore = writable(stored_data)
 
