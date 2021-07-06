@@ -14,8 +14,6 @@ class UserModel {
     this._prep_data = prep_data
     this._data = data
     this._model = new Regressor(model)
-    if (this._prep_data.length === 0 && this._data.length === 0)
-      this.reset(0)
   }
 
   stringify() {
@@ -27,6 +25,15 @@ class UserModel {
       prep_data: this._prep_data,
       data: this._data,
       model: this._model
+    }
+  }
+
+  status() {
+    return {
+      initialized: this._prep_data.length !== 0 || this._data.length !== 0,
+      model: this._model,
+      nbr_prep_data: this._prep_data.length,
+      nbr_data: this._data.length,
     }
   }
 

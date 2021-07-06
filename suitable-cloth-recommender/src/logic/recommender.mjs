@@ -40,8 +40,13 @@ export default class Recommender {
     this.user_model = await new UserModel(user_model)
   }
 
+  async model_status() {
+    return await this.user_model.status()
+  }
+
   async reset_model(sensation_deviation) {
     await this.user_model.reset(sensation_deviation)
+    await this.save_model()
   }
 
   async save_model() {
