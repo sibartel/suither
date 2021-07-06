@@ -9,11 +9,13 @@
 </style>
 
 <script>
-  	import {goto} from '@sapper/app'
-	import {Button, Slider, Alert, Icon} from 'svelte-materialify/src'
+  	import { goto } from '@sapper/app'
+	import { ProgressCircular, Button, Slider, Alert, Icon } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
-	import Recommender from "../logic/recommender.mjs"
-	import { dataStore } from "../stores/dataStore.js"
+	import Recommender from '../logic/recommender.mjs'
+	import { dataStore } from '../stores/dataStore.js'
+
+	let promise_status = Recommender.get().then(async r => await r.model_status(), console.error)
 
 	// On each load the value used to reset the model should be displayed and not the last selected
 	let current_selection = $dataStore.self_assessed_sensation_deviation
@@ -36,27 +38,35 @@
 	<title>Suither - Reset</title>
 </svelte:head>
 
-<h4>Reset model</h4>
+{#await promise_status}
+	<ProgressCircular indeterminate color="primary" />
+{:then status}
+	<h4>Reset model</h4>
 
-<fieldset>
-	<legend>How would you self assess your thermal sensitivity?</legend>
-	<div class="fields">
-		<Slider step={1} thumb min={-10} max={10} bind:value={current_selection}>
-			<span slot="prepend-outer">
-				❄️
-			</span>
-			<span slot="append-outer">
-				🔥
-			</span>
-		</Slider>
-	</div>
-</fieldset>
+	<fieldset>
+		<legend>How would you self assess your thermal sensitivity?</legend>
+		<div class="fields">
+			<Slider step={1} thumb min={-10} max={10} bind:value={current_selection}>
+				<span slot="prepend-outer">
+					❄️
+				</span>
+				<span slot="append-outer">
+					🔥
+				</span>
+			</Slider>
+		</div>
+	</fieldset>
 
-<Alert class="error-text" dense outlined>
-	<div slot="icon">
-	  <Icon path={mdiAlert} />
-	</div>
-	By proceeding the user model will be resetted. All already aquired feedback data will be lost!
-</Alert>
+	{#if status.initialized}
+		<Alert class="error-text" dense outlined>
+			<div slot="icon">
+			<Icon path={mdiAlert} />
+			</div>
+			By proceeding the user model will be resetted. All already aquired feedback data will be lost!
+		</Alert>
+	{/if}
 
-<Button class="red white-text" on:click={resetModel}>Reset Model</Button>
+	<Button class="red white-text" on:click={resetModel}>Reset Model</Button>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
