@@ -1,12 +1,16 @@
 <script>
-    import weather from "../logic/weather-api.mjs"
+	import { dataStore } from '../stores/dataStore.js'
+    import weather from '../logic/weather-api.mjs'
 
-    let temp = 0;
-    let rain_perc = 0.0;
+    let temperature = '-'
+    let precipitation_probability = '-'
 
-    weather.get_weather_current().then(forecast => temp = forecast.feels_like);
-    weather.get_weather_today().then(forecast => rain_perc = forecast.pop);
+    $: weather.get_weather_forecast().then(hourly_forecast => {
+        let forecast = hourly_forecast.slice(0, $dataStore.recommender_settings.relevant_hours)
+        temperature = Math.max(...forecast.map(data => data.feels_like))
+        precipitation_probability = Math.max(...forecast.map(data => data.pop))
+    })
 </script>
 
 
-🌤 {temp}°C 🌧 {rain_perc * 100}%
+🌤 {temperature}°C 🌧 {precipitation_probability * 100}%
