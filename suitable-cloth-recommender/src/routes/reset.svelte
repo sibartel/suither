@@ -25,7 +25,7 @@
 			await r.reset_model($dataStore.self_assessed_sensation_deviation / 2)
 		})
 
-		goto('/pick')
+		goto('/')
 	}
 
 	//const emojis = ['❄️ ❄️ ❄️ ', '❄️ ❄️ ', '❄️ ', '☁️', '🔥', '🔥🔥', '🔥🔥🔥'];

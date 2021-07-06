@@ -32,12 +32,7 @@
 			current_cloth_set: cs
 		}))
 	}
-	
 </script>
-
-<svelte:head>
-	<title>Suither</title>
-</svelte:head>
 
 <fieldset>
 	<legend>How long are we out today?</legend>

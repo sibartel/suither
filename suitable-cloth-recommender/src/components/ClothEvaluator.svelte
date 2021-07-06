@@ -12,25 +12,12 @@
 </style>
 
 <script>	
-	import {Slider} from 'svelte-materialify';
-	import WeatherBar from '../components/WeatherBar.svelte';
+	import { Divider, Slider, Button } from 'svelte-materialify';
 	import { dataStore } from "../stores/dataStore.js"
-	import { onDestroy } from "svelte";
-
-	let data;
-	const unsubscribe = dataStore.subscribe(value => {
-		data = value;
-	});
-	onDestroy(unsubscribe);
-
-
-	let min = -300;
-	let max = 300;
-
-	let ctime = new Date();
 
 	// these automatically update when `time`
 	// changes, because of the `$:` prefix
+	let ctime = new Date();
 	$: hours = ctime.getHours();
 	$: minutes = ctime.getMinutes();
 	$: current_time = hours + ":" + zeroFill(minutes, 2);
@@ -43,13 +30,13 @@
   		return number + ""; // always return a string
 	}
 
-	let reviews = data.reviews;
+	let reviews = $dataStore.reviews;
 
 	let feeling = 0;
 	let id = 0;
 
 
-	 function handleClick() {
+	function submitFeedback() {
 	}
 
 	const addReview = () => {
@@ -71,17 +58,10 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Review</title>
- </svelte:head>
-
-<h1>Review todays outfit</h1>
-
-<WeatherBar/>
-
+<h4>Review todays outfit</h4>
 
 <p>	
-	<img src={data.outfit_picture} alt=""> 
+	<img src={$dataStore.current_cloth_set.filename} alt=""> 
 </p>
 
 <p>
@@ -90,7 +70,7 @@
 	<button on:click={addReview}>
 		Add Review
 	</button>
-	<Slider {min} {max} bind:value={feeling}>
+	<Slider min={-300} max={300} bind:value={feeling}>
 		<span slot="prepend-outer">
 			❄️
 		</span>
@@ -100,14 +80,14 @@
 	</Slider>
 </p>
 
-<!-- <Divider inset /> -->
-<h3>Todays Reviews:</h3>
+<Divider />
 
+<h4>Todays Reviews:</h4>
 
-{#each reviews as review}
+{#each $dataStore.reviews as review}
 	<div>
 		<p>Time: {review.time} <button on:click={() => deleteReview(review.id)}>❌</button>
-			<Slider {min} {max} readonly value={review.feeling}> 
+			<Slider min={-300} max={300} readonly value={review.feeling}> 
 				<span slot="prepend-outer">
 					❄️
 				</span>
@@ -120,12 +100,13 @@
 		
 	</div>	
 {:else}
-	<p>There are no reviews at this moment.</p>	
+	<p>There are no reviews at the moment.</p>	
 {/each}
 
 
-
-
-<button on:click={handleClick}>
-	Confirm
-</button>
+<Button on:click={() => $dataStore.current_cloth_set = null}>
+	Dismiss Outfit
+</Button>
+<Button on:click={submitFeedback}>
+	Submit Feedback
+</Button>
