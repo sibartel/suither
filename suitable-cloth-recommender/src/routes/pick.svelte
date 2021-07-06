@@ -24,7 +24,7 @@
 			$dataStore.recommender_settings.category,
 			$dataStore.recommender_settings.ignore_rain
 		)
-	})
+	}, console.error)
 
 	const selectOutfit = (cs) => {
 		dataStore.update(current => ({

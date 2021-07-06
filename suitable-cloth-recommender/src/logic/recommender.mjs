@@ -19,6 +19,9 @@ export default class Recommender {
 
   static async get() {
     if (!instance) {
+      if (typeof(Worker) === 'undefined')
+        throw new Error('Web worker not supported in current renderer.')
+
       let new_instance = new Recommender(cloth_sets)
       await new_instance.init()
       instance = new_instance
@@ -31,7 +34,7 @@ export default class Recommender {
 
     let user_model = {}
 
-    if(typeof localStorage !== 'undefined' && localStorage.getItem('user_model'))
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('user_model'))
       user_model = JSON.parse(localStorage.getItem('user_model'))
 
     this.user_model = await new UserModel(user_model)
@@ -42,7 +45,7 @@ export default class Recommender {
   }
 
   async save_model() {
-    if(typeof localStorage !== 'undefined')
+    if (typeof localStorage !== 'undefined')
       localStorage.setItem('user_model', await this.user_model.stringify())
   }
 
