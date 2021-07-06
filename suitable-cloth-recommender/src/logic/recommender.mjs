@@ -51,6 +51,7 @@ export default class Recommender {
 
     return (await Promise.all(this.cloth_sets.filter(cs => !category || cs.category.includes(category)).map(async cs => {
       let {variants, ...base_variant} = cs
+      base_variant.description = 'base'
       let cloth_variants = [base_variant, ...variants ?? []]
 
       let forecast_sensation = await Promise.all(forecast.map(async hour => {
