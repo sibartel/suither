@@ -1,3 +1,7 @@
+<svelte:head>
+	<link href='https://fonts.googleapis.com/css?family=Oleo Script' rel='stylesheet'>
+</svelte:head>
+
 <script>
 	import { MaterialApp, AppBar, Menu, ListItem, Button, Icon} from 'svelte-materialify/src'
 	import { mdiDotsVertical } from '@mdi/js'
@@ -14,11 +18,16 @@
 		text-decoration: none;
 		color: black;
 	}
+
+	.text-logo {
+		font-family: 'Oleo Script';
+		font-size: 30px;
+	}
 </style>
 
 <MaterialApp theme="light">
 	<AppBar>
-		<a class="nav-link" slot="title" href="/">Suither</a>
+		<a class="text-logo nav-link" slot="title" href="/">Suither</a>
 		<div style="flex-grow:1" />
 		<span><WeatherBar /></span>
 		<Menu right>

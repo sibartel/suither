@@ -8,8 +8,10 @@
     <img style="max-width: 100%;" src={data.filename} alt="">
     <CardTitle style="word-break: normal;">{data.description}</CardTitle>
     <CardSubtitle>
-        Mean : {data.predicted_thermal_sensation.mean.toPrecision(4)}<br />
-        MSE : {data.predicted_thermal_sensation.mse.toPrecision(4)}
+        MSE : {data.predicted_thermal_sensation.mse.toFixed(4)}<br />
+        Mean : {data.predicted_thermal_sensation.mean.toFixed(4)}<br />
+        Min : {data.predicted_thermal_sensation.min.toFixed(4)}<br />
+        Max : {data.predicted_thermal_sensation.max.toFixed(4)}
     </CardSubtitle>
     <slot name="bottom"></slot>
 </Card>
