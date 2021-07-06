@@ -12,8 +12,9 @@
 </style>
 
 <script>	
-	import { Divider, Slider, Button } from 'svelte-materialify';
-	import { dataStore } from "../stores/dataStore.js"
+	import { Divider, Slider, Button } from 'svelte-materialify'
+	import { dataStore } from '../stores/dataStore.js'
+	import ClothCard from '../components/ClothCard.svelte'
 
 	// these automatically update when `time`
 	// changes, because of the `$:` prefix
@@ -60,9 +61,7 @@
 
 <h4>Review todays outfit</h4>
 
-<p>	
-	<img src={$dataStore.current_cloth_set.filename} alt=""> 
-</p>
+<ClothCard data={$dataStore.current_cloth_set} />
 
 <p>
 	Time
