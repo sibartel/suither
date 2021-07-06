@@ -11,36 +11,26 @@
 <script>
 	import Recommender from "../logic/recommender.mjs"
 	import { dataStore } from "../stores/dataStore.js"
-	import { onDestroy } from "svelte";
 
 	import {TextField, Radio, Switch, Slider, Button, Divider, Card, CardTitle, CardSubtitle, CardActions, ProgressCircular} from 'svelte-materialify/src'
-
-	let data;
-	const unsubscribe = dataStore.subscribe(value => {
-		data = value;
-	});
-	onDestroy(unsubscribe);
-	
-	let category = null;
-	let hours_to_spent = data.hours_to_spent;
-	let activity_int = data.activity_level;
-	let ignore_rain = true;
-	let min=45; let max=400;
 
 	let categories = Recommender.get_categories()
 
 	$: recs = Recommender.get().then(async r => {
-		await r.reset_model(0) // model should not be resetted here
-		return r.recommend(hours_to_spent, activity_int, category, ignore_rain)
+		await r.reset_model(0) // model should not be resetted here, check for cold-start
+		return r.recommend(
+			$dataStore.recommender_settings.relevant_hours,
+			$dataStore.recommender_settings.activity,
+			$dataStore.recommender_settings.category,
+			$dataStore.recommender_settings.ignore_rain
+		)
 	})
 
-	const handleClick = () => {
-		dataStore.update(current => {
-			current.activity = category;
-			current.hours_to_spent = hours_to_spent;
-			current.activity_level = activity_int;
-			return current;
-		})
+	const selectOutfit = (cs) => {
+		dataStore.update(current => ({
+			...current,
+			current_cloth_set: cs
+		}))
 	}
 	
 </script>
@@ -52,9 +42,9 @@
 <fieldset>
 	<legend>How long are we out today?</legend>
 	<div class="fields">
-		<Slider step={1} bind:value={hours_to_spent} thumb min={1} max={16}>
+		<Slider step={1} bind:value={$dataStore.recommender_settings.relevant_hours} thumb min={1} max={16}>
 			<span slot="append-outer">
-				<TextField bind:value={hours_to_spent} style="width: 80px;">
+				<TextField bind:value={$dataStore.recommender_settings.relevant_hours} style="width: 80px;">
 					<div slot="append">
 						hours
 					</div>
@@ -67,7 +57,7 @@
 <fieldset>
 	<legend>How hard will we push ourselves physically today?</legend>
 	<div class="fields">
-		<Slider {min} {max} bind:value={activity_int}>
+		<Slider min={45} max={400} bind:value={$dataStore.recommender_settings.activity}>
 			<span slot="prepend-outer">
 				Relax
 			</span>
@@ -81,9 +71,9 @@
 <fieldset>
 	<legend>What style do we wear today?</legend>
 	<div class="fields">
-		<Radio bind:group={category} value={null}>Show me all</Radio>
+		<Radio bind:group={$dataStore.recommender_settings.category} value={null}>Show me all</Radio>
 		{#each categories as c}
-			<Radio bind:group={category} value={c}>{c}</Radio>
+			<Radio bind:group={$dataStore.recommender_settings.category} value={c}>{c}</Radio>
 		{/each}
 	</div>
 </fieldset>
@@ -91,7 +81,7 @@
 <fieldset>
 	<legend>Any other things you want me to consider?</legend>
 	<div class="fields">
-		<Switch bind:checked={ignore_rain}>Ignore rain</Switch>
+		<Switch bind:checked={$dataStore.recommender_settings.ignore_rain}>Ignore rain</Switch>
 	</div>
 </fieldset>
 
@@ -107,7 +97,7 @@
 				<CardTitle style="word-break: normal;">{rec.description}</CardTitle>
 				<CardSubtitle>Mean : {rec.predicted_thermal_sensation.mean.toPrecision(4)}</CardSubtitle>
 				<CardActions>
-					<Button text class="primary-text">Select</Button>
+					<Button text class="primary-text" on:click={() => selectOutfit(rec)}>Select</Button>
 				</CardActions>
 			</Card>
 		{:else}
