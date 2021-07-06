@@ -9,8 +9,8 @@
 </style>
 
 <script>
-	import Recommender from "../logic/recommender.mjs"
-	import { dataStore } from "../stores/dataStore.js"
+	import Recommender from '../logic/recommender.mjs'
+	import { dataStore } from '../stores/dataStore.js'
 
 	import {TextField, Radio, Switch, Slider, Button, Divider, CardActions, ProgressCircular} from 'svelte-materialify/src'
 
@@ -19,7 +19,6 @@
 	const categories = Recommender.get_categories()
 
 	$: recs = Recommender.get().then(async r => {
-		await r.reset_model(0) // model should not be resetted here, check for cold-start
 		return r.recommend(
 			$dataStore.recommender_settings.relevant_hours,
 			$dataStore.recommender_settings.activity,
