@@ -79,13 +79,15 @@ export default class Recommender {
           max: Math.max(...forecast_sensation.map(data => data.predicted_thermal_sensation)),
           min: Math.min(...forecast_sensation.map(data => data.predicted_thermal_sensation)),
           mean: forecast_sensation.map(data => data.predicted_thermal_sensation)
-            .reduce((acc, ts) => acc + ts, 0) / relevant_hours
+            .reduce((acc, ts) => acc + ts, 0) / relevant_hours,
+          mse: forecast_sensation.map(data => data.predicted_thermal_sensation)
+          .reduce((acc, ts) => acc + Math.pow(ts, 2), 0) / relevant_hours,
         },
         precipitation_suitable: forecast_sensation.every(hour => hour.precipitation_suitable),
         ...cs
       }
     }))).filter(cs => ignore_rain || cs.precipitation_suitable).sort((a, b) =>
-      (Math.abs(a.predicted_thermal_sensation.mean) > Math.abs(b.predicted_thermal_sensation.mean)) ? 1 : -1
+      (Math.abs(a.predicted_thermal_sensation.mse) > Math.abs(b.predicted_thermal_sensation.mse)) ? 1 : -1
     )
   }
 

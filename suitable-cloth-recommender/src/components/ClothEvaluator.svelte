@@ -1,8 +1,4 @@
 <style>
-	img{
-		max-width: 200px;
-		margin: 0 0 1em 0;
-	}
 	input {
 		background-color: rgb(255, 255, 255);
 	}
@@ -103,7 +99,10 @@
 {/each}
 
 
-<Button on:click={() => $dataStore.current_cloth_set = null}>
+<Button class="red white-text" on:click={() => {
+		$dataStore.current_cloth_set = null
+		$dataStore.reviews = []
+	}}>
 	Dismiss Outfit
 </Button>
 <Button on:click={submitFeedback}>
