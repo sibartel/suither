@@ -28,7 +28,7 @@
 
 <MaterialApp theme="{$dataStore.theme}">
 	<AppBar>
-		<a class="text-logo nav-link" slot="title" href="/">Suither</a>
+		<a class="text-logo nav-link" slot="title" href=".">Suither</a>
 		<div style="flex-grow:1" />
 		<span><WeatherBar /></span>
 		<Menu right>

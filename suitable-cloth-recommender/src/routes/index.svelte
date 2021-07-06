@@ -18,7 +18,7 @@
 {:then status}
 	{#if !status.initialized}
 		<h4>Welcome to Suither</h4>
-		<Button class="green white-text" on:click={() => goto('/reset')}>
+		<Button class="green white-text" on:click={() => goto('reset')}>
 			Getting Started
 		</Button>
 	{:else if !$dataStore.current_cloth_set}
