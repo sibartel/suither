@@ -58,15 +58,15 @@
         </Button>
     </CardActions>
     {#if detailed_view_enabled}
-        <div transition:slide>
+        <div transition:slide="{{duration: 200}}">
             <Divider />
             <div class="pl-4 pr-4 pt-2 pb-2">
-                {#each working_data.predicted_thermal_sensation.hourly as hour_data, hour}
+                {#each working_data.predicted_thermal_sensation.hourly as hour}
                     <span class="text--secondary">
-                        Hour {hour}: {hour_data.description !== 'base' ? hour_data.description : ''}
+                        {new Date(parseInt(hour.dt) * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} {hour.description !== 'base' ? ' - ' + hour.description : ''}
                     </span>
                     <div class="mt-10">
-                        <Slider value={hour_data.predicted_thermal_sensation * 100} connect={false, false}
+                        <Slider value={hour.predicted_thermal_sensation * 100} connect={false, false}
                             thumb={scaleThumb} min={-300} max={300} persistentThumb readonly>
                             <span slot="prepend-outer">
                                 ❄️

@@ -66,7 +66,8 @@ export default class Recommender {
         return (await Promise.all(cloth_variants.map(async cv => ({
           predicted_thermal_sensation: await this.user_model.predict(hour.feels_like, cv.insulation, activity),
           precipitation_suitable: hour.pop < PRECIPITATION_THRESHOLD || cv.waterproof,
-          ...cv
+          ...cv,
+          ...hour
         })))).reduce((p, c) => {
           if (!ignore_rain) {
             if (c.precipitation_suitable && !p.precipitation_suitable)
