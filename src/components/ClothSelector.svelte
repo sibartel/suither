@@ -12,7 +12,7 @@
 	import Recommender from '../logic/recommender.mjs'
 	import { dataStore } from '../stores/dataStore.js'
 
-	import {TextField, Radio, Switch, Slider, Button, Divider, CardActions, ProgressCircular} from 'svelte-materialify/src'
+	import {TextField, Radio, Switch, Slider, Button, Divider, ProgressCircular} from 'svelte-materialify/src'
 
 	import ClothCard from '../components/ClothCard.svelte'
 
@@ -83,15 +83,13 @@
 
 <Divider />
 
-<div class="d-flex flex-wrap justify-space-around mt-4 mb-4">
+<div class="d-flex flex-wrap justify-space-around align-start mt-4 mb-4">
 	{#await recs}
 		<ProgressCircular indeterminate color="primary" />
 	{:then recs}
 		{#each recs as rec}
 			<ClothCard data={rec}>
-				<CardActions slot="bottom">
-					<Button class="primary-color black-text" block on:click={() => selectOutfit(rec)}>Select</Button>
-				</CardActions>
+				<Button slot="button" class="primary-color black-text" block on:click={() => selectOutfit(rec)}>Select</Button>
 			</ClothCard>
 		{:else}
 			<p>No recommendations found, maybe adjust the settings. Answer from recommender: {JSON.stringify(recs)}</p>	

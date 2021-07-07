@@ -11,8 +11,10 @@
 <script>
     export let data
 
-    import { Slider, Card, CardTitle, CardSubtitle, CardText } from 'svelte-materialify/src'
-    
+    import { Button, Icon, Divider, Slider, Card, CardTitle, CardSubtitle, CardText, CardActions } from 'svelte-materialify/src'
+    import { mdiChevronDown } from '@mdi/js'
+    import { slide } from 'svelte/transition'
+
 	import { dataStore } from '../stores/dataStore.js'
 
     const emojis = ['❄️ ❄️ ❄️ ', '❄️ ❄️ ', '❄️ ', '☁️', '🔥', '🔥🔥', '🔥🔥🔥'];
@@ -23,6 +25,8 @@
     $: mean = data.predicted_thermal_sensation.mean.toFixed(1)
     $: min = data.predicted_thermal_sensation.min.toFixed(1)
     $: max = data.predicted_thermal_sensation.max.toFixed(1)
+
+    let detailed_view_enabled = false
 </script>
 
 <Card style="max-width: 350px; margin: 15px 10px;">
@@ -32,7 +36,7 @@
         MSE : {data.predicted_thermal_sensation.mse.toFixed(4)}
     </CardSubtitle>
     <CardText style="padding-bottom: 0;">
-        <div style="margin-top: 40px">
+        <div class="mt-10">
             <Slider value={[min * 100, mean * 100, max * 100]}
                 thumb={[false, scaleThumb, false]} connect={[false, true, true, false]}
                 min={-300} max={300} persistentThumb readonly>
@@ -45,5 +49,35 @@
             </Slider>
         </div>
     </CardText>
-    <slot name="bottom"></slot>
+    <CardActions>
+        <div class="flex-grow-1 mr-2">
+            <slot name="button"></slot>
+        </div>
+        <Button text fab size="small" class="ml-auto" on:click={() => {detailed_view_enabled = !detailed_view_enabled}}>
+          <Icon path={mdiChevronDown} rotate={detailed_view_enabled ? 180 : 0} />
+        </Button>
+    </CardActions>
+    {#if detailed_view_enabled}
+        <div transition:slide>
+            <Divider />
+            <div class="pl-4 pr-4 pt-2 pb-2">
+                {#each data.predicted_thermal_sensation.hourly as hour_data, hour}
+                    <span class="text--secondary">
+                        Hour {hour}: {hour_data.description !== 'base' ? hour_data.description : ''}
+                    </span>
+                    <div class="mt-10">
+                        <Slider value={hour_data.predicted_thermal_sensation * 100} connect={false, false}
+                            thumb={scaleThumb} min={-300} max={300} persistentThumb readonly>
+                            <span slot="prepend-outer">
+                                ❄️
+                            </span>
+                            <span slot="append-outer">
+                                🔥
+                            </span>
+                        </Slider>
+                    </div>
+                {/each}
+            </div>
+        </div>
+    {/if}
 </Card>
