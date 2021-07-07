@@ -41,7 +41,7 @@
 		<Slider step={1} bind:value={$dataStore.recommender_settings.relevant_hours} thumb min={1} max={16}>
 			<span slot="append-outer">
 				<TextField bind:value={$dataStore.recommender_settings.relevant_hours} style="width: 80px;">
-					<div slot="append">
+					<div slot="append" class="text--secondary">
 						hours
 					</div>
 				</TextField>
@@ -54,10 +54,10 @@
 	<legend>How hard will we push ourselves physically today?</legend>
 	<div class="fields">
 		<Slider min={45} max={400} bind:value={$dataStore.recommender_settings.activity}>
-			<span slot="prepend-outer">
+			<span slot="prepend-outer" class="text--secondary">
 				Relax
 			</span>
-			<span slot="append-outer">
+			<span slot="append-outer" class="text--secondary">
 				Heavy Sport
 			</span>
 		</Slider>
@@ -90,7 +90,7 @@
 		{#each recs as rec}
 			<ClothCard data={rec}>
 				<CardActions slot="bottom">
-					<Button text class="primary-text" on:click={() => selectOutfit(rec)}>Select</Button>
+					<Button class="primary-color black-text" block on:click={() => selectOutfit(rec)}>Select</Button>
 				</CardActions>
 			</ClothCard>
 		{:else}
