@@ -57,7 +57,14 @@
 
 <h4>Review todays outfit</h4>
 
-<ClothCard data={$dataStore.current_cloth_set} />
+<ClothCard data={$dataStore.current_cloth_set}>
+	<Button slot="button" class="red white-text" block on:click={() => {
+		$dataStore.current_cloth_set = null
+		$dataStore.reviews = []
+	}}>
+		Dismiss Outfit
+	</Button>
+</ClothCard>
 
 <p>
 	Time
@@ -98,13 +105,6 @@
 	<p>There are no reviews at the moment.</p>	
 {/each}
 
-
-<Button class="red white-text" on:click={() => {
-		$dataStore.current_cloth_set = null
-		$dataStore.reviews = []
-	}}>
-	Dismiss Outfit
-</Button>
 <Button on:click={submitFeedback}>
 	Submit Feedback
 </Button>

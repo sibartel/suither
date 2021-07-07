@@ -14,26 +14,26 @@
     import { Button, Icon, Divider, Slider, Card, CardTitle, CardSubtitle, CardText, CardActions } from 'svelte-materialify/src'
     import { mdiChevronDown } from '@mdi/js'
     import { slide } from 'svelte/transition'
+    import clone from 'just-clone'
 
 	import { dataStore } from '../stores/dataStore.js'
-
-    const emojis = ['❄️ ❄️ ❄️ ', '❄️ ❄️ ', '❄️ ', '☁️', '🔥', '🔥🔥', '🔥🔥🔥'];
-  	const thermalThumb = (v) => emojis[Math.min(Math.floor((v + 300) * 7 / 600), 6)];
     
-  	const scaleThumb = (v) => (v / 100).toFixed(1);
+  	const scaleThumb = (v) => (v / 100).toFixed(1)
 
-    $: mean = data.predicted_thermal_sensation.mean.toFixed(1)
-    $: min = data.predicted_thermal_sensation.min.toFixed(1)
-    $: max = data.predicted_thermal_sensation.max.toFixed(1)
+    let working_data = clone(data)
+
+    let mean = working_data.predicted_thermal_sensation.mean.toFixed(1)
+    let min = working_data.predicted_thermal_sensation.min.toFixed(1)
+    let max = working_data.predicted_thermal_sensation.max.toFixed(1)
 
     let detailed_view_enabled = false
 </script>
 
 <Card style="max-width: 350px; margin: 15px 10px;">
     <img class="{$dataStore.theme === 'dark' ? 'dark-theme' : ''}" style="max-width: 100%;" src={`${data.file_identifier}-350px.png`} alt="">
-    <CardTitle style="word-break: normal;">{data.description}</CardTitle>
+    <CardTitle style="word-break: normal;">{working_data.description}</CardTitle>
     <CardSubtitle>
-        MSE : {data.predicted_thermal_sensation.mse.toFixed(4)}
+        MSE : {working_data.predicted_thermal_sensation.mse.toFixed(4)}
     </CardSubtitle>
     <CardText style="padding-bottom: 0;">
         <div class="mt-10">
@@ -61,7 +61,7 @@
         <div transition:slide>
             <Divider />
             <div class="pl-4 pr-4 pt-2 pb-2">
-                {#each data.predicted_thermal_sensation.hourly as hour_data, hour}
+                {#each working_data.predicted_thermal_sensation.hourly as hour_data, hour}
                     <span class="text--secondary">
                         Hour {hour}: {hour_data.description !== 'base' ? hour_data.description : ''}
                     </span>
