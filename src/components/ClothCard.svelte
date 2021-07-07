@@ -1,6 +1,6 @@
 <style>
     img.dark-theme {
-        filter: invert(82%) sepia(65%) saturate(3663%) hue-rotate(347deg) brightness(105%) contrast(100%);
+        filter: invert(83%) sepia(0%) saturate(0%) hue-rotate(186deg) brightness(91%) contrast(93%);
     }
 </style>
 
