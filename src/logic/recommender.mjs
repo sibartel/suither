@@ -1,7 +1,7 @@
 import { wrap } from 'comlink'
 
 import weather from './weather-api.mjs'
-import {cloth_sets} from './cloth_sets.mjs'
+import { cloth_sets } from './cloth_sets.mjs'
 
 const PRECIPITATION_THRESHOLD = 0.3
 

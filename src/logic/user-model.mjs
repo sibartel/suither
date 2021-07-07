@@ -1,5 +1,5 @@
-import Regressor from "./regressor.mjs"
-import {Matrix} from "ml-matrix"
+import { Matrix } from 'ml-matrix'
+import Regressor from './regressor.mjs'
 
 // https://en.wikipedia.org/wiki/Thermal_comfort#Interplay_of_temperature_and_humidity
 // https://en.wikipedia.org/wiki/Clothing_insulation
@@ -39,7 +39,7 @@ class UserModel {
 
   reset(sensation_deviation) {
     this._data = []
-    this._model.weights = DEFAULT_WEIGHTS.add(Matrix.columnVector([sensation_deviation, 0, 0, 0]))
+    this._model.weights = Matrix.add(DEFAULT_WEIGHTS, Matrix.columnVector([-sensation_deviation, 0, 0, 0]))
 
     this._prep_data = []
     for (let feels_like_temperature = -5; feels_like_temperature <= 40; feels_like_temperature += 15)
