@@ -3,7 +3,7 @@ import { Matrix } from 'ml-matrix'
 export default class Regressor {
   constructor(options) {
     const {
-      number_epochs = 5e4,
+      number_epochs = 1e4,
       batch_size = undefined,
       learning_rate = 1e-4,
       weights = undefined,

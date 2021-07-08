@@ -82,8 +82,9 @@
 		and all other settings.
 	</Alert>
 
-	<Button class="red white-text" on:click={() => {
+	<Button class="red white-text" on:click={async () => {
 		localStorage.clear()
+		await goto('.')
 		location.reload()
 	}}>Delete localStorage</Button>
 {:catch error}
