@@ -34,6 +34,8 @@ class UserModel {
       model: this._model,
       nbr_prep_data: this._prep_data.length,
       nbr_data: this._data.length,
+      prep_data: this._prep_data,
+      data: this._data
     }
   }
 
