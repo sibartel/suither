@@ -2,11 +2,18 @@ import { Matrix } from 'ml-matrix'
 
 export default class Regressor {
   constructor(options) {
-    const {number_epochs = 5e3, batch_size = undefined, learning_rate = 1e-4, weights = undefined} = options
+    const {
+      number_epochs = 5e4,
+      batch_size = undefined,
+      learning_rate = 1e-4,
+      weights = undefined,
+      last_mse = undefined
+    } = options
     this.number_epochs = number_epochs
     this.batch_size = batch_size
     this.learning_rate = learning_rate
-    this.weights = weights ? Matrix.checkMatrix(weights) : undefined;
+    this.weights = weights ? Matrix.checkMatrix(weights) : undefined
+    this.last_mse = last_mse
   }
 
   toJSON(_) {
@@ -14,11 +21,12 @@ export default class Regressor {
       number_epochs: this.number_epochs,
       batch_size: this.batch_size,
       learning_rate: this.learning_rate,
-      weights: this.weights
+      weights: this.weights,
+      last_mse: this.last_mse
     }
   }
 
-  train(features, target, quiet=false) {
+  train(features, target, quiet=true) {
     features = Matrix.checkMatrix(features)
     target = Matrix.checkMatrix(target)
 
@@ -40,8 +48,9 @@ export default class Regressor {
         weights = weights.add(gradient.mul(this.learning_rate))
         sum_squared_error += error.pow(2).transpose().mmul(Matrix.ones(error.rows, 1)).get(0, 0)
       }
+      this.last_mse = sum_squared_error / features.rows
       if (!quiet)
-        console.log(`Epoch: ${epoch}/${this.number_epochs}; MSE: ${sum_squared_error / features.rows}`)
+        console.log(`Epoch: ${epoch}/${this.number_epochs}; MSE: ${this.last_mse}`)
     }
 
     this.weights = weights;

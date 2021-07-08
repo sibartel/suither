@@ -12,6 +12,7 @@
   	import { goto } from '@sapper/app'
 	import { ProgressCircular, Button, Slider, Alert, Icon } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
+	
 	import Recommender from '../logic/recommender.mjs'
 	import { dataStore } from '../stores/dataStore.js'
 

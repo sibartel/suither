@@ -1,110 +1,118 @@
 <style>
-	input {
-		background-color: rgb(255, 255, 255);
+	fieldset {
+		border: none;
 	}
-	p {
-		max-width: 400px;
+
+	.fields {
+		margin-left: 20px;
 	}
 </style>
 
 <script>	
-	import { Divider, Slider, Button } from 'svelte-materialify/src'
+	import { Divider, Slider, Button, ProgressCircular, Alert, Icon, Radio } from 'svelte-materialify/src'
+	import { mdiCheck, mdiAlert } from '@mdi/js'
+    import clone from 'just-clone'
+
 	import { dataStore } from '../stores/dataStore.js'
 	import ClothCard from '../components/ClothCard.svelte'
+	import Recommender from '../logic/recommender.mjs'
 
-	// these automatically update when `time`
-	// changes, because of the `$:` prefix
-	let ctime = new Date();
-	$: hours = ctime.getHours();
-	$: minutes = ctime.getMinutes();
-	$: current_time = hours + ":" + zeroFill(minutes, 2);
+	let current_cloth_set = clone($dataStore.current_cloth_set)
 
-	function zeroFill( number, width ){
-  		width -= number.toString().length;
-  		if ( width > 0){
-    	return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
-  		}
-  		return number + ""; // always return a string
-	}
+	let variant_insulation = $dataStore.current_cloth_set.insulation
+	let current_activity = $dataStore.recommender_settings.activity
+	let thermal_sensation = 0
 
-	let reviews = $dataStore.reviews;
+	let feedback_status = null
+	let pending = false
 
-	let feeling = 0;
-	let id = 0;
-
-
-	function submitFeedback() {
-	}
-
-	const addReview = () => {
-		id++;
-		reviews = reviews.concat({time: current_time, feeling, id});
-		console.log(reviews);
-		dataStore.update(current => {
-			current.reviews = reviews;
-			return current;
-		}) 
-	}
-
-	const deleteReview = (id) => {
-		reviews = reviews.filter((review) => review.id != id)
-		dataStore.update(current => {
-			current.reviews = reviews;
-			return current;
-		}) 
+	const add_feedback = () => {
+		pending = true
+		feedback_status = Recommender.get().then(async r => {
+			await r.live_feedback(parseFloat(variant_insulation), parseFloat(current_activity), parseFloat(thermal_sensation) / 100)
+			pending = false
+		})
 	}
 </script>
 
-<h4>Review todays outfit</h4>
+<h4>Current outfit</h4>
 
-<ClothCard data={$dataStore.current_cloth_set}>
-	<Button slot="button" class="red white-text" block on:click={() => {
+<ClothCard data={current_cloth_set}>
+	<Button slot="button" class="primary-color black-text" block on:click={() => {
 		$dataStore.current_cloth_set = null
 		$dataStore.reviews = []
 	}}>
-		Dismiss Outfit
+		Choose Another Outfit
 	</Button>
 </ClothCard>
 
-<p>
-	Time
-	<input bind:value={current_time}>
-	<button on:click={addReview}>
-		Add Review
-	</button>
-	<Slider min={-300} max={300} bind:value={feeling}>
-		<span slot="prepend-outer">
-			❄️
-		</span>
-		<span slot="append-outer">
-			🔥
-		  </span>
-	</Slider>
-</p>
-
 <Divider />
 
-<h4>Todays Reviews:</h4>
+<h4>Provide Feedback</h4>
 
-{#each $dataStore.reviews as review}
-	<div>
-		<p>Time: {review.time} <button on:click={() => deleteReview(review.id)}>❌</button>
-			<Slider min={-300} max={300} readonly value={review.feeling}> 
+<div>
+	<fieldset>
+		<legend>What variant are you wearing right now?</legend>
+		<div class="fields">
+			<Radio bind:group={variant_insulation} disabled={pending || undefined} value={current_cloth_set.insulation}>Base</Radio>
+			{#each current_cloth_set.variants as variant}
+				<Radio bind:group={variant_insulation} disabled={pending || undefined} value={variant.insulation}>{variant.description}</Radio>
+			{/each}
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>How physically active are you right now?</legend>
+		<div class="fields">
+			<Slider min={45} max={400} disabled={pending || undefined} bind:value={current_activity}>
+				<span slot="prepend-outer" class="text--secondary">
+					Relax
+				</span>
+				<span slot="append-outer" class="text--secondary">
+					Heavy Sport
+				</span>
+			</Slider>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>How warm or cold is you right now?</legend>
+		<div class="fields">
+			<Slider min={-300} max={300} connect={false, false} disabled={pending || undefined} bind:value={thermal_sensation}>
 				<span slot="prepend-outer">
 					❄️
 				</span>
 				<span slot="append-outer">
 					🔥
-				  </span>
+				</span>
 			</Slider>
-			
-		</p>
-		
-	</div>	
-{:else}
-	<p>There are no reviews at the moment.</p>	
-{/each}
+		</div>
+	</fieldset>
 
-<Button on:click={submitFeedback}>
-	Submit Feedback
-</Button>
+	<Button class="primary-color black-text" disabled={pending || undefined} on:click={add_feedback}>
+		Add Feedback
+	</Button>
+</div>
+
+<div class="mt-10 mb-10 d-flex justify-center">
+	{#if feedback_status}
+		{#await feedback_status}
+			<ProgressCircular indeterminate color="primary" />
+		{:then}
+			<Alert class="success-color" dense>
+				<div slot="icon">
+				<Icon path={mdiCheck} />
+				</div>
+				Sucessfully added your feedback data. The model was trained and your
+				feedback is taken into account from now on.
+			</Alert>
+		{:catch error}
+			<Alert class="error-text" dense>
+				<div slot="icon">
+				<Icon path={mdiAlert} />
+				</div>
+				{error.message}
+			</Alert>
+		{/await}
+	{/if}
+</div>

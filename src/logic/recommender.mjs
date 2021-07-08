@@ -104,7 +104,7 @@ export default class Recommender {
   }
 
   async live_feedback(cloth_insulation, activity, thermal_sensation) {
-    let current_temperature = await weather.get_weather_current().feels_like
+    let current_temperature = (await weather.get_weather_current()).feels_like
     await this.user_model.feedback(current_temperature, cloth_insulation, activity, thermal_sensation)
 
     await this.save_model()
