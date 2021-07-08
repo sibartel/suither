@@ -10,7 +10,7 @@
 
 <script>
   	import { goto } from '@sapper/app'
-	import { ProgressCircular, Button, Slider, Alert, Icon } from 'svelte-materialify/src'
+	import { ProgressCircular, Button, Slider, Alert, Icon, Divider } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
 	
 	import Recommender from '../logic/recommender.mjs'
@@ -59,15 +59,38 @@
 	</fieldset>
 
 	{#if status.initialized}
-		<Alert class="error-text" dense outlined>
+		<Alert class="warning-text" dense outlined>
 			<div slot="icon">
-			<Icon path={mdiAlert} />
+				<Icon path={mdiAlert} />
 			</div>
 			By proceeding the user model will be resetted. All already aquired feedback data will be lost!
 		</Alert>
 	{/if}
 
 	<Button class="red white-text" on:click={resetModel}>Reset Model</Button>
+
+	<Divider class="mt-6 mb-4" />
+
+	<h4>Delete localStorage</h4>
+
+	
+	<Alert class="warning-text" dense outlined>
+		<div slot="icon">
+			<Icon path={mdiAlert} />
+		</div>
+		By proceeding all data stored in the localStorage will be deleted. This includes the complete model
+		and all other settings.
+	</Alert>
+
+	<Button class="red white-text" on:click={() => {
+		localStorage.clear()
+		location.reload()
+	}}>Delete localStorage</Button>
 {:catch error}
-	<p style="color: red">{error.message}</p>
+	<Alert class="error-text" dense>
+		<div slot="icon">
+			<Icon path={mdiAlert} />
+		</div>
+		{error.message}
+	</Alert>
 {/await}

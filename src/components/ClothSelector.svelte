@@ -12,7 +12,8 @@
 	import Recommender from '../logic/recommender.mjs'
 	import { dataStore } from '../stores/dataStore.js'
 
-	import {TextField, Radio, Switch, Slider, Button, Divider, ProgressCircular} from 'svelte-materialify/src'
+	import { Alert, Icon, TextField, Radio, Switch, Slider, Button, Divider, ProgressCircular } from 'svelte-materialify/src'
+	import { mdiAlert } from '@mdi/js'
 
 	import ClothCard from '../components/ClothCard.svelte'
 
@@ -95,6 +96,11 @@
 			<p>No recommendations found, maybe adjust the settings. Answer from recommender: {JSON.stringify(recs)}</p>	
 		{/each}
 	{:catch error}
-		<p style="color: red">{error.message}</p>
+		<Alert class="error-text" dense>
+			<div slot="icon">
+				<Icon path={mdiAlert} />
+			</div>
+			{error.message}
+		</Alert>
 	{/await}
 </div>

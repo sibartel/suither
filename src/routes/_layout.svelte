@@ -24,6 +24,10 @@
 		font-family: 'Oleo Script';
 		font-size: 30px;
 	}
+
+	:global(.s-list-item__title) {
+		overflow: unset;
+	}
 </style>
 
 <MaterialApp theme="{$dataStore.theme}">
@@ -37,7 +41,7 @@
 			  <Icon path={mdiDotsVertical} />
 			</Button>
 		  </div>
-		  <ListItem on:click={() => goto('reset')}>Reset model</ListItem>
+		  <ListItem on:click={() => goto('settings')}>Settings</ListItem>
 		  <ListItem on:click={() => $dataStore.theme = $dataStore.theme === 'dark' ? 'light' : 'dark'}>Switch theme</ListItem>
 		  <ListItem on:click={() => goto('info')}>Info for nerds</ListItem>
 		  <ListItem on:click={() => goto('about')}>About</ListItem>
