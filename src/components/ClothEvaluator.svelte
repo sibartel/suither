@@ -16,6 +16,7 @@
 	import { dataStore } from '../stores/dataStore.js'
 	import ClothCard from './ClothCard.svelte'
 	import ActivitySlider from './ActivitySlider.svelte'
+	import ThermalSensationInputSlider from './ThermalSensationInputSlider.svelte'
 	import Recommender from '../logic/recommender.mjs'
 
 	let current_cloth_set = clone($dataStore.current_cloth_set)
@@ -31,7 +32,7 @@
 	const add_feedback = () => {
 		pending = true
 		feedback_status = Recommender.get().then(async r => {
-			await r.live_feedback(parseFloat(variant_insulation), parseFloat(activity_level), parseFloat(thermal_sensation) / 100)
+			await r.live_feedback(parseFloat(variant_insulation), parseFloat(activity_level), parseFloat(thermal_sensation))
 			pending = false
 		})
 	}
@@ -39,29 +40,33 @@
 
 <h4>Current outfit</h4>
 
-<ClothCard data={current_cloth_set}>
-	<Button slot="button" class="primary-color black-text" block on:click={() => {
-		$dataStore.current_cloth_set = null
-		$dataStore.reviews = []
-	}}>
-		Choose Another Outfit
-	</Button>
-</ClothCard>
+<div class="d-flex justify-center">
+	<ClothCard data={current_cloth_set}>
+		<Button slot="button" class="primary-color black-text" block on:click={() => {
+			$dataStore.current_cloth_set = null
+			$dataStore.reviews = []
+		}}>
+			Choose Another Outfit
+		</Button>
+	</ClothCard>
+</div>
 
 <Divider class="mt-6 mb-4" />
 
 <h4>Provide Feedback</h4>
 
 <div>
-	<fieldset>
-		<legend>What variant are you wearing right now?</legend>
-		<div class="fields">
-			<Radio bind:group={variant_insulation} disabled={pending || undefined} value={current_cloth_set.insulation}>Base</Radio>
-			{#each current_cloth_set.variants as variant}
-				<Radio bind:group={variant_insulation} disabled={pending || undefined} value={variant.insulation}>{variant.description}</Radio>
-			{/each}
-		</div>
-	</fieldset>
+	{#if current_cloth_set.variants}
+		<fieldset>
+			<legend>What variant are you wearing right now?</legend>
+			<div class="fields">
+				<Radio bind:group={variant_insulation} disabled={pending || undefined} value={current_cloth_set.insulation}>Base</Radio>
+				{#each current_cloth_set.variants as variant}
+					<Radio bind:group={variant_insulation} disabled={pending || undefined} value={variant.insulation}>{variant.description}</Radio>
+				{/each}
+			</div>
+		</fieldset>
+	{/if}
 
 	<fieldset>
 		<legend>How physically active are you right now?</legend>
@@ -73,14 +78,7 @@
 	<fieldset>
 		<legend>How warm or cold is you right now?</legend>
 		<div class="fields">
-			<Slider min={-300} max={300} connect={false, false} disabled={pending || undefined} bind:value={thermal_sensation}>
-				<span slot="prepend-outer">
-					❄️
-				</span>
-				<span slot="append-outer">
-					🔥
-				</span>
-			</Slider>
+			<ThermalSensationInputSlider disabled={pending || undefined} bind:thermal_sensation={thermal_sensation} />
 		</div>
 	</fieldset>
 

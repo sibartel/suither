@@ -16,8 +16,10 @@
 </svelte:head>
 
 {#await promise_status}
-	<ProgressCircular indeterminate color="primary" />
-{:then status}
+	<div class="mt-10 mb-10 d-flex justify-center">
+		<ProgressCircular indeterminate color="primary" />
+	</div>
+	{:then status}
 	{#if !status.initialized}
 		<h4>Welcome to Suither</h4>
 		<Button class="green white-text" on:click={() => goto('settings')}>
