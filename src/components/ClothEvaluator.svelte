@@ -8,8 +8,8 @@
 	}
 </style>
 
-<script>	
-	import { Divider, Slider, Button, ProgressCircular, Alert, Icon, Radio } from 'svelte-materialify/src'
+<script>
+	import { Divider, Button, ProgressCircular, Alert, Icon, Radio } from 'svelte-materialify/src'
 	import { mdiCheck, mdiAlert } from '@mdi/js'
     import clone from 'just-clone'
 

@@ -10,29 +10,27 @@
 
 <script>
   	import { goto } from '@sapper/app'
-	import { ProgressCircular, Button, Slider, Alert, Icon, Divider, Radio } from 'svelte-materialify/src'
+	import { ProgressCircular, Button, Alert, Icon, Divider, Radio } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
 	
 	import Recommender from '../logic/recommender.mjs'
 	import { dataStore } from '../stores/dataStore.js'
+	import ThermalSensationInputSlider from '../components/ThermalSensationInputSlider.svelte'
 
 	let promise_status = Recommender.get().then(async r => await r.model_status(), console.error)
 
 	// On each load the value used to reset the model should be displayed and not the last selected
-	let current_selection = $dataStore.self_assessed_sensation_deviation
+	let thermal_sensation = $dataStore.self_assessed_sensation_deviation
 
 	const resetModel = async () => {
-		$dataStore.self_assessed_sensation_deviation = current_selection
+		$dataStore.self_assessed_sensation_deviation = thermal_sensation
 
 		await Recommender.get().then(async r => {
-			await r.reset_model($dataStore.self_assessed_sensation_deviation / 2)
+			await r.reset_model(thermal_sensation)
 		})
 
 		goto('.')
 	}
-
-	//const emojis = ['❄️ ❄️ ❄️ ', '❄️ ❄️ ', '❄️ ', '☁️', '🔥', '🔥🔥', '🔥🔥🔥'];
-  	//const customThumb = (v) => emojis[Math.min(Math.floor((v+300) / 7), 300)];
 </script>
 
 <svelte:head>
@@ -61,14 +59,10 @@
 	<fieldset>
 		<legend>How would you self assess your thermal sensitivity?</legend>
 		<div class="fields">
-			<Slider step={1} thumb min={-10} max={10} bind:value={current_selection}>
-				<span slot="prepend-outer">
-					❄️
-				</span>
-				<span slot="append-outer">
-					🔥
-				</span>
-			</Slider>
+			<ThermalSensationInputSlider
+				min={-5} max={5} step={0.5}
+				bind:thermal_sensation={thermal_sensation}
+				init={$dataStore.self_assessed_sensation_deviation} />
 		</div>
 	</fieldset>
 

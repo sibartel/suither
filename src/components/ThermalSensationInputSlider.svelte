@@ -2,14 +2,17 @@
     import { Slider } from 'svelte-materialify/src'
 
     export let thermal_sensation
-    export const init = 0
+    export let init = 0
+    export let min = -3
+    export let max = 3
+    export let step = 1
     
-    let slider_value = init
+    let slider_value = init / step
 
-    $: thermal_sensation = slider_value
+    $: thermal_sensation = slider_value * step
 </script>
 
-<Slider step={1} min={-3} max={3} connect={false, false} thumb={() => thermal_sensation} bind:value={slider_value} {...$$restProps}>
+<Slider min={min / step} max={max / step} step={1} connect={false, false} thumb={() => thermal_sensation} bind:value={slider_value} {...$$restProps}>
     <span slot="prepend-outer">
         ❄️
     </span>
