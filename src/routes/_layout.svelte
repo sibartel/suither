@@ -32,6 +32,11 @@
 
 	let system_theme = 'light'
 	onMount(() => {
+		if (!window.matchMedia)
+			return
+
+		system_theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
 		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
 			system_theme = e.matches ? 'dark' : 'light'
 		})
