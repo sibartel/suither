@@ -1,5 +1,5 @@
 <style>
-    img.dark-theme {
+    :global(.theme--dark img.visualization) {
         filter: invert(83%) sepia(0%) saturate(0%) hue-rotate(186deg) brightness(91%) contrast(93%);
     }
 
@@ -15,8 +15,6 @@
     import { mdiChevronDown } from '@mdi/js'
     import { slide } from 'svelte/transition'
     import clone from 'just-clone'
-
-	import { dataStore } from '../stores/dataStore.js'
     
   	const scaleThumb = (v) => (v / 100).toFixed(1)
 
@@ -30,7 +28,7 @@
 </script>
 
 <Card style="max-width: 350px; margin: 15px 10px;">
-    <img class="{$dataStore.theme === 'dark' ? 'dark-theme' : ''}" style="max-width: 100%;" src={`${data.file_identifier}-350px.png`} alt="">
+    <img class="visualization" style="max-width: 100%;" src={`${data.file_identifier}-350px.png`} alt="">
     <CardTitle style="word-break: normal;">{working_data.description}</CardTitle>
     <CardSubtitle>
         MSE : {working_data.predicted_thermal_sensation.mse.toFixed(4)}

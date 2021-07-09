@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 const key = 'data_store'
 
 let stored_data = {
-    theme: 'dark',
+    theme: 'system',
     self_assessed_sensation_deviation: 0.0,
     current_cloth_set: null,
     recommender_settings: {

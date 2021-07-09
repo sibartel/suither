@@ -10,7 +10,7 @@
 
 <script>
   	import { goto } from '@sapper/app'
-	import { ProgressCircular, Button, Slider, Alert, Icon, Divider } from 'svelte-materialify/src'
+	import { ProgressCircular, Button, Slider, Alert, Icon, Divider, Radio } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
 	
 	import Recommender from '../logic/recommender.mjs'
@@ -42,7 +42,21 @@
 {#await promise_status}
 	<ProgressCircular indeterminate color="primary" />
 {:then status}
-	<h4>Reset model</h4>
+
+	<h4>Select Theme</h4>
+
+	<fieldset>
+		<legend>Which theme do you want to have?</legend>
+		<div class="fields">
+			<Radio bind:group={$dataStore.theme} value={'system'}>System theme</Radio>
+			<Radio bind:group={$dataStore.theme} value={'dark'}>Dark theme</Radio>
+			<Radio bind:group={$dataStore.theme} value={'light'}>Light theme</Radio>
+		</div>
+	</fieldset>
+
+	<Divider class="mt-6 mb-4" />
+
+	<h4>Reset User Model</h4>
 
 	<fieldset>
 		<legend>How would you self assess your thermal sensitivity?</legend>

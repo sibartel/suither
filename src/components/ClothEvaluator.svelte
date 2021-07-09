@@ -46,7 +46,7 @@
 	</Button>
 </ClothCard>
 
-<Divider />
+<Divider class="mt-6 mb-4" />
 
 <h4>Provide Feedback</h4>
 
