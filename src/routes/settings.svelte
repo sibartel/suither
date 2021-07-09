@@ -60,7 +60,7 @@
 		<legend>How would you self assess your thermal sensitivity?</legend>
 		<div class="fields">
 			<ThermalSensationInputSlider
-				min={-5} max={5} step={0.5}
+				min={-3} max={3} step={0.5}
 				bind:thermal_sensation={thermal_sensation}
 				init={$dataStore.self_assessed_sensation_deviation} />
 		</div>
