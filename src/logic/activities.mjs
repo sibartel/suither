@@ -1,5 +1,5 @@
 // name, thermal power
-export let activities = [
+export default [
   ['Resting - Reclining', 45],
   ['Resting - Seated', 60],
   ['Resting - Standing', 70],

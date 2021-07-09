@@ -15,14 +15,17 @@
 	import { Alert, Icon, TextField, Radio, Switch, Slider, Button, Divider, ProgressCircular } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
 
-	import ClothCard from '../components/ClothCard.svelte'
+	import ClothCard from './ClothCard.svelte'
+	import ActivitySlider from './ActivitySlider.svelte'
 
 	const categories = Recommender.get_categories()
+
+	let activity_level = 0
 
 	$: recs = Recommender.get().then(async r => {
 		return r.recommend(
 			$dataStore.recommender_settings.relevant_hours,
-			$dataStore.recommender_settings.activity,
+			activity_level,
 			$dataStore.recommender_settings.category,
 			$dataStore.recommender_settings.ignore_rain
 		)
@@ -54,14 +57,7 @@
 <fieldset>
 	<legend>How hard will we push ourselves physically today?</legend>
 	<div class="fields">
-		<Slider min={45} max={400} bind:value={$dataStore.recommender_settings.activity}>
-			<span slot="prepend-outer" class="text--secondary">
-				Relax
-			</span>
-			<span slot="append-outer" class="text--secondary">
-				Heavy Sport
-			</span>
-		</Slider>
+		<ActivitySlider bind:activity_level={activity_level} bind:activity_index={$dataStore.recommender_settings.activity_index} />
 	</div>
 </fieldset>
 

@@ -14,14 +14,16 @@
     import clone from 'just-clone'
 
 	import { dataStore } from '../stores/dataStore.js'
-	import ClothCard from '../components/ClothCard.svelte'
+	import ClothCard from './ClothCard.svelte'
+	import ActivitySlider from './ActivitySlider.svelte'
 	import Recommender from '../logic/recommender.mjs'
 
 	let current_cloth_set = clone($dataStore.current_cloth_set)
 
 	let variant_insulation = $dataStore.current_cloth_set.insulation
-	let current_activity = $dataStore.recommender_settings.activity
+	let current_activity_index = $dataStore.recommender_settings.activity_index
 	let thermal_sensation = 0
+	let activity_level = 0
 
 	let feedback_status = null
 	let pending = false
@@ -29,7 +31,7 @@
 	const add_feedback = () => {
 		pending = true
 		feedback_status = Recommender.get().then(async r => {
-			await r.live_feedback(parseFloat(variant_insulation), parseFloat(current_activity), parseFloat(thermal_sensation) / 100)
+			await r.live_feedback(parseFloat(variant_insulation), parseFloat(activity_level), parseFloat(thermal_sensation) / 100)
 			pending = false
 		})
 	}
@@ -64,14 +66,7 @@
 	<fieldset>
 		<legend>How physically active are you right now?</legend>
 		<div class="fields">
-			<Slider min={45} max={400} disabled={pending || undefined} bind:value={current_activity}>
-				<span slot="prepend-outer" class="text--secondary">
-					Relax
-				</span>
-				<span slot="append-outer" class="text--secondary">
-					Heavy Sport
-				</span>
-			</Slider>
+			<ActivitySlider disabled={pending || undefined} bind:activity_level={activity_level} bind:activity_index={current_activity_index} />
 		</div>
 	</fieldset>
 

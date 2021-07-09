@@ -8,7 +8,7 @@ let stored_data = {
     current_cloth_set: null,
     recommender_settings: {
         relevant_hours: 5,
-        activity: 60,
+        activity_index: 2,
         category: null,
         ignore_rain: true
     },

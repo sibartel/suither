@@ -1,5 +1,6 @@
 <script>
-  import { ProgressCircular } from 'svelte-materialify/src'
+  import { ProgressCircular, Divider } from 'svelte-materialify/src'
+  import { dataStore } from '../stores/dataStore.js'
   import Recommender from '../logic/recommender.mjs'
 
   let promise_status = Recommender.get().then(async r => await r.model_status(), console.error)
@@ -17,6 +18,16 @@
 	<pre>
 		<code style="display:block; white-space:pre-wrap">
 			{JSON.stringify(status, null, 2)}
+		</code>
+	</pre>
+
+	<Divider class="mt-6 mb-4" />
+
+	<h4>Data Store</h4>
+
+	<pre>
+		<code style="display:block; white-space:pre-wrap">
+			{JSON.stringify($dataStore, null, 2)}
 		</code>
 	</pre>
 {:catch error}
