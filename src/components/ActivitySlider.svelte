@@ -1,7 +1,7 @@
 <script>
     import { Slider } from 'svelte-materialify/src'
 
-    import activities from '../logic/activities.mjs'
+    import activities from '../logic/activities.js'
 
     export let activity_level
     export let activity_index = 0

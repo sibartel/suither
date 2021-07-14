@@ -1,7 +1,7 @@
 <script>
   import { ProgressCircular, Divider } from 'svelte-materialify/src'
   import { dataStore } from '../stores/dataStore.js'
-  import Recommender from '../logic/recommender.mjs'
+  import Recommender from '../logic/recommender.js'
 
   let promise_status = Recommender.get().then(async r => await r.model_status(), console.error)
 </script>

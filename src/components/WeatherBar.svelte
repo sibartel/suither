@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte'
     import { dataStore } from '../stores/dataStore.js'
-    import weather from '../logic/weather-api.mjs'
+    import weather from '../logic/weather-api.js'
 
     let temperature = '-'
     let precipitation_probability = '-'

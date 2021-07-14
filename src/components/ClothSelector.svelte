@@ -9,7 +9,7 @@
 </style>
 
 <script>
-	import Recommender from '../logic/recommender.mjs'
+	import Recommender from '../logic/recommender.js'
 	import { dataStore } from '../stores/dataStore.js'
 
 	import { Alert, Icon, TextField, Radio, Switch, Slider, Button, Divider, ProgressCircular } from 'svelte-materialify/src'

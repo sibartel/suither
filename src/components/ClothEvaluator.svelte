@@ -17,7 +17,7 @@
 	import ClothCard from './ClothCard.svelte'
 	import ActivitySlider from './ActivitySlider.svelte'
 	import ThermalSensationInputSlider from './ThermalSensationInputSlider.svelte'
-	import Recommender from '../logic/recommender.mjs'
+	import Recommender from '../logic/recommender.js'
 
 	let current_cloth_set = clone($dataStore.current_cloth_set)
 

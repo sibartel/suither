@@ -13,7 +13,7 @@
 	import { ProgressCircular, Button, Alert, Icon, Divider, Radio } from 'svelte-materialify/src'
 	import { mdiAlert } from '@mdi/js'
 	
-	import Recommender from '../logic/recommender.mjs'
+	import Recommender from '../logic/recommender.js'
 	import { dataStore } from '../stores/dataStore.js'
 	import ThermalSensationInputSlider from '../components/ThermalSensationInputSlider.svelte'
 

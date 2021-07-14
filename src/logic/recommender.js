@@ -1,7 +1,7 @@
 import { wrap } from 'comlink'
 
-import weather from './weather-api.mjs'
-import { cloth_sets } from './cloth_sets.mjs'
+import weather from './weather-api.js'
+import { cloth_sets } from './cloth-sets.js'
 
 const PRECIPITATION_THRESHOLD = 0.3
 
@@ -30,7 +30,7 @@ export default class Recommender {
   }
 
   async init() {
-    const UserModel = wrap(new Worker(new URL('worker.mjs', import.meta.url)))
+    const UserModel = wrap(new Worker(new URL('worker.js', import.meta.url)))
 
     let user_model = {}
 

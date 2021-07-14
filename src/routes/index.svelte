@@ -16,7 +16,7 @@
 	import ClothSelector from '../components/ClothSelector.svelte'
 	import ClothEvaluator from '../components/ClothEvaluator.svelte'
 	import ThermalSensationInputSlider from '../components/ThermalSensationInputSlider.svelte'
-	import Recommender from '../logic/recommender.mjs'
+	import Recommender from '../logic/recommender.js'
 
 	let promise_status = Recommender.get().then(async r => await r.model_status(), console.error)
 

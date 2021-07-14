@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "suither",
+  "description": "A Cloth Recommender",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
@@ -16,7 +16,6 @@
     "compression": "^1.7.1",
     "just-clone": "^3.2.1",
     "ml-matrix": "^6.8.0",
-    "ml-regression-multivariate-linear": "^2.0.3",
     "polka": "next",
     "sirv": "^1.0.0",
     "svelte-materialify": "^0.3.10"

@@ -1,5 +1,5 @@
 import { Matrix } from 'ml-matrix'
-import Regressor from './regressor.mjs'
+import Regressor from './regressor.js'
 
 // https://en.wikipedia.org/wiki/Thermal_comfort#Interplay_of_temperature_and_humidity
 // https://en.wikipedia.org/wiki/Clothing_insulation
