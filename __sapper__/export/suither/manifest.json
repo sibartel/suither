@@ -1,7 +1,7 @@
 {
 	"background_color": "#000",
 	"theme_color": "#ffc512",
-	"name": "Suither - A Cloth Recommender",
+	"name": "Suither - A Clothing Recommender",
 	"short_name": "Suither",
 	"display": "standalone",
 	"orientation": "potrait",
