@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_SECRET = '0c2090b7d93cf61728d4b223dc04a202'
+const API_SECRET = process.env.OPENWEATHERMAP_API_TOKEN
 
 const DEFAULT_COORDS = {
   latitude: 49.56,

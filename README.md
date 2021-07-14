@@ -19,6 +19,15 @@ A live demo can be found under https://sibartel.github.io/suither/. For the best
 * User feedback is used to improve the predicter model
 
 ## Usage
+### OpenWeather API key
+You need a personal api key from [openweathermap](https://home.openweathermap.org). The free plan should be sufficient for most applications. You then can either provide the key in a `.env` file in the root of the project:
+
+```
+OPENWEATHERMAP_API_TOKEN = SECRET_KEY
+```
+
+Or export the key as environment variable: `export OPENWEATHERMAP_API_TOKEN=SECRET_KEY`.
+
 ### Development
 
 ```bash
