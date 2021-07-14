@@ -1,4 +1,4 @@
-# Suither - A  A Clothing Recommender
+# Suither - A Clothing Recommender
 
 A prototype PWA with the intent to propose weather-suitable outfits to support the users with their daily clothing selection.
 
