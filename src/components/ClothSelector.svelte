@@ -40,7 +40,7 @@
 </script>
 
 <fieldset>
-	<legend>How long are we out today?</legend>
+	<legend>How long are we going to be outside today?</legend>
 	<div class="fields">
 		<Slider step={1} bind:value={$dataStore.recommender_settings.relevant_hours} thumb min={1} max={16}>
 			<span slot="append-outer">
@@ -62,17 +62,17 @@
 </fieldset>
 
 <fieldset>
-	<legend>What style do we wear today?</legend>
+	<legend>Which style would you like to wear today?</legend>
 	<div class="fields">
-		<Radio bind:group={$dataStore.recommender_settings.category} value={null}>Show me all</Radio>
+		<Radio bind:group={$dataStore.recommender_settings.category} value={null}>Anything</Radio>
 		{#each categories as c}
-			<Radio bind:group={$dataStore.recommender_settings.category} value={c}>{c}</Radio>
+			<Radio bind:group={$dataStore.recommender_settings.category} value={c}>{`${c[0].toUpperCase()}${c.slice(1)}`}</Radio>
 		{/each}
 	</div>
 </fieldset>
 
 <fieldset>
-	<legend>Any other things you want me to consider?</legend>
+	<legend>Anything else you would like me to consider?</legend>
 	<div class="fields">
 		<Switch bind:checked={$dataStore.recommender_settings.ignore_rain}>Ignore rain</Switch>
 	</div>

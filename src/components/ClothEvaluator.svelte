@@ -58,7 +58,7 @@
 <div>
 	{#if current_cloth_set.variants}
 		<fieldset>
-			<legend>What variant are you wearing right now?</legend>
+			<legend>Which variant are you wearing right now?</legend>
 			<div class="fields">
 				<Radio bind:group={variant_insulation} disabled={pending || undefined} value={current_cloth_set.insulation}>Base</Radio>
 				{#each current_cloth_set.variants as variant}
@@ -76,7 +76,7 @@
 	</fieldset>
 
 	<fieldset>
-		<legend>How warm or cold is you right now?</legend>
+		<legend>Are you feeling hot or cold right now?</legend>
 		<div class="fields">
 			<ThermalSensationInputSlider disabled={pending || undefined} bind:thermal_sensation={thermal_sensation} />
 		</div>
