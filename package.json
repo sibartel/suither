@@ -1,6 +1,6 @@
 {
   "name": "suither",
-  "description": "A Cloth Recommender",
+  "description": "A Clothing Recommender",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",

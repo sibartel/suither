@@ -2,11 +2,11 @@
 	<title>About</title>
 </svelte:head>
 
-<h4>Suither - A Cloth Recommender</h4>
+<h4>Suither - A Clothing Recommender</h4>
 
 <p>
 	A prototype PWA with the intent to propose weather-suitable outfits
-	to support the users with their daily cloth selection.
+	to support the users with their daily clothing selection.
 </p>
 <p>
 	This project was developed as part of the <em>Intelligent User Interfaces</em>

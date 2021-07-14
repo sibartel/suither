@@ -1,6 +1,6 @@
-# Suither - A Cloth Recommender
+# Suither - A  A Clothing Recommender
 
-A prototype PWA with the intent to propose weather-suitable outfits to support the users with their daily cloth selection.
+A prototype PWA with the intent to propose weather-suitable outfits to support the users with their daily clothing selection.
 
 This project was developed as part of the *Intelligent User Interfaces* course @ University of Bayreuth in the SS21.
 
@@ -10,12 +10,12 @@ A live demo can be found under https://sibartel.github.io/suither/. For the best
 * Progressive Web App
 * All data and calculations are performed locally on the device
 
-* Hourly analysis of upcoming weather regarding thermal sensation and precipitation taking different possible cloth variants into account
+* Hourly analysis of upcoming weather regarding thermal sensation and precipitation taking different possible clothing variants into account
 * Multivariate non-linear regression as user model predicting the thermal sensation based on:
     * Feels like temperature
-    * Cloth insulation
+    * Clothing insulation
     * Activity level
-* Support for different cloth categories
+* Support for different clothing categories
 * User feedback is used to improve the predicter model
 
 ## Usage

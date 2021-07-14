@@ -44,7 +44,7 @@
 	{#if !status.initialized}
 		<h4>Welcome to Suither</h4>
 
-		<p>We try to support you with your daily cloth selection by proposing
+		<p>We try to support you with your daily clothing selection by proposing
 			weather-suitable outfits to you. To know if an outfit is too cold or
 			too warm for you, we use a model with a multivariate non-linear regression
 			to predict your thermal sensation in a given situation. For this prediction
@@ -53,7 +53,7 @@
 
 		<ul class="mb-4">
 			<li>Feels like temperature (including real temperature, wind speeds, humidity and sunshine)</li>
-			<li>Cloth insulation</li>
+			<li>Clothing insulation</li>
 			<li>Activity level</li>
 		</ul>
 
