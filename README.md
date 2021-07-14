@@ -40,3 +40,6 @@ Depending on your hosting environment you maybe want to adjust the basepath in t
 ```js
 const url = dev ? '/' : '/suither' <-- here
 ```
+
+## License
+suither is licensed under the [MIT](LICENSE) license.
