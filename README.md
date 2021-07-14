@@ -4,6 +4,8 @@ A prototype PWA with the intent to propose weather-suitable outfits to support t
 
 This project was developed as part of the *Intelligent User Interfaces* course @ University of Bayreuth in the SS21.
 
+A live demo can be found under https://sibartel.github.io/suither/. For the best experience use your mobile browser to add the PWA to your homescreen.
+
 ## Features
 * Progressive Web App
 * All data and calculations are performed locally on the device
