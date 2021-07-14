@@ -11,7 +11,7 @@
 <p>
 	This project was developed as part of the <em>Intelligent User Interfaces</em>
 	course @ University of Bayreuth in the SS21:
-	<a target="_blank" rel=external href="https://github.com/sibartel/suitable-cloth-recommender">Github</a>
+	<a target="_blank" rel=external href="https://github.com/sibartel/suither">Github</a>
 </p>
 
 <h5>Authors</h5>

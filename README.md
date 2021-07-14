@@ -29,12 +29,12 @@ This will start the development server on [localhost:3000](http://localhost:3000
 ### Production
 
 ```bash
-export NODE_ENV=production; npx sapper export --basepath 'suitable-cloth-recommender'
+export NODE_ENV=production; npx sapper export --basepath 'suither'
 ```
 
-The static exported project files are located under [\_\_sapper\_\_/export/suitable-cloth-recommender](__sapper__/export/suitable-cloth-recommender).
+The static exported project files are located under [\_\_sapper\_\_/export/suither](__sapper__/export/suither).
 
 Depending on your hosting environment you maybe want to adjust the basepath in the previous command and in [src/server.js#L9](src/server.js#L9):
 ```js
-const url = dev ? '/' : '/suitable-cloth-recommender' <-- here
+const url = dev ? '/' : '/suither' <-- here
 ```
