@@ -11,7 +11,7 @@
   "dependencies": {
     "@mdi/js": "^5.9.55",
     "@surma/rollup-plugin-off-main-thread": "^2.2.2",
-    "axios": "^0.21.4",
+    "axios": "git://github.com/axios/axios.git#51f3ccb08ea944c79fd008d82a17466549a1dfa3",
     "comlink": "^4.3.1",
     "compression": "^1.7.1",
     "dotenv": "^10.0.0",
